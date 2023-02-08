@@ -19,7 +19,7 @@ GITLAB_ROOT_USERNAME = os.getenv('GITLAB_ROOT_USERNAME')
 GITLAB_ROOT_PASSWORD = os.getenv('GITLAB_ROOT_PASSWORD')
 
 
-# Technologies
+# Services
 from freeIPA  import FreeIPA
 from gitLab import GitLab
 IPA = FreeIPA(FREEIPA_DOMAIN, FREEIPA_ROOT_USERNAME, FREEIPA_ROOT_PASSWORD )
@@ -61,5 +61,24 @@ def addUser():
     return data
 
 
+@app.route("/getProjecstGitLab", methods = ['GET'])
+def getProjecsGitLab():
+    return GL.getProjecstGitLab()
+
+
+@app.route("/addUserProject", methods = ['GET'])
+def addUserProject():
+    
+
+    ## In test
+    import gitlab
+    username='usera02' 
+    idProject=6
+    accessLevel= gitlab.const.AccessLevel.DEVELOPER
+    print(type(accessLevel))
+
+
+    return GL.putUserInAProject(username, idProject, accessLevel)
+    
 
 app.run()

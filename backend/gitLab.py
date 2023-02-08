@@ -25,8 +25,7 @@ class GitLab():
         login_button.submit()
     
 
-    def putUserInGroupGitLab(self, userName):
-
+    def createConnectionWithGitLab(self):
         res = requests.post(self.GITLAB_DOMAIN+'/oauth/token',
                         data={
                             "grant_type" : "password",
@@ -36,7 +35,43 @@ class GitLab():
         
         token = res.json()
         token = token['access_token']
+
         gl = gitlab.Gitlab(url=self.GITLAB_DOMAIN, oauth_token=token, api_version=4) 
+
+        return gl
+
+
+    def getProjecstGitLab(self):
+
+        gl = self.createConnectionWithGitLab()
+
+        projects = gl.projects.list()
+        dictOfProjects = {}
+
+        for p in projects:
+            dictOfProjects.update( {p.name:{'id': p.id, 'name': p.name }})
+
+        return dictOfProjects
+
+
+    def putUserInAProject(self, userName, idProject, accessLevel):
+
+        gl = self.createConnectionWithGitLab()
+
+        user = gl.users.list(search=userName)
+        idUser = user[0].id
+
+        project = gl.projects.get(idProject)
+
+        member = project.members.create({ 'user_id': idUser,
+                                          'access_level': accessLevel})
+
+        return member
+
+
+    def putUserInGroupGitLab(self, userName):
+ 
+        gl = self.createConnectionWithGitLab()
 
         user = gl.users.list(search=userName)
         idUser = user[0].id
