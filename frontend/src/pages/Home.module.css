@@ -1,0 +1,34 @@
+.Body {
+    width: 100%;
+    display: grid;
+    padding: 40px;
+    grid-column-gap: 20px;
+    grid-row-gap: 20px;
+    grid-template-columns: repeat(2, minmax(250px,1fr));
+}
+
+.Container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin: 40px;
+}
+
+.btn{
+    background-color: #222;
+    color: #fff;
+    padding: 0.7em 1.2em;
+    text-decoration: none;
+    font-weight: 500;
+    transition: .5s;
+    cursor: pointer;
+    border: none;
+    width: 38vw;
+    height: 34vh;
+}
+
+.btn:hover {
+    color: #ED0000;
+   
+}

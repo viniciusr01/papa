@@ -3,6 +3,7 @@ import styles from './Navbar.module.css'
 
 
 function Navbar(){
+    
     return (
     
     <nav className={styles.navbar}>     
@@ -13,6 +14,7 @@ function Navbar(){
         <li className={styles.item}><Link to="/">Home</Link></li>
         <li className={styles.item}><Link to="/cadastro">Fomulário Cadastro</Link></li>
         <li className={styles.item}><Link to="/usuarios">Usuários</Link></li>
+        <li className={styles.item}><Link to="/grupos">Grupos</Link></li>
     </ul>
 
     </ nav>
