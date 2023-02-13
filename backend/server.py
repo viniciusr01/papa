@@ -81,7 +81,7 @@ def createUser():
     # Authenticate to GitLab to create a user
     GL.createUserGitLab(userName, randonPassword)
 
-    #
+    # TO DO
     # UPDATE USER IN DB
     #
 
@@ -94,10 +94,17 @@ def getProjecsGitLab():
     return GL.getProjecstGitLab()
 
 
+@app.route("/getGroupsIPA", methods = ['GET'])
+def getGroupsIPA():
+    print(IPA.getGroupsIPA())
+    return IPA.getGroupsIPA()
+
+
 @app.route("/addUserProject", methods = ['GET'])
 def addUserProject():
     
-    ## In test
+    #  Need to finalize
+    #  In test
     import gitlab
     username='usera02' 
     idProject=6

@@ -54,6 +54,7 @@ class GitLab():
         return dictOfProjects
 
 
+    # Need to finalize
     def putUserInAProject(self, userName, idProject, accessLevel):
 
         gl = self.createConnectionWithGitLab()
@@ -69,6 +70,7 @@ class GitLab():
         return member
 
 
+    # Need to finalize
     def putUserInGroupGitLab(self, userName):
  
         gl = self.createConnectionWithGitLab()
