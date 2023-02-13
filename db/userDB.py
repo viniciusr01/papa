@@ -40,7 +40,7 @@ def insertUser(username, firstName, lastName, fullName , email):
 
         cur.execute('INSERT INTO usuarios (username, firstName, lastName, fullName, email, iscreatedipa, iscreatedgitlab, iscreatedjenkins)'
                     'VALUES (%s, %s, %s, %s, %s, %s, %s, %s)',
-                    (username, firstName, lastName, fullName, email, False, False, True)
+                    (username, firstName, lastName, fullName, email, False, False, False)
                     )
         
         conn.commit()
@@ -49,6 +49,11 @@ def insertUser(username, firstName, lastName, fullName , email):
     
     except(Exception, psycopg2.Error) as error:
         print("Failed to insert user into database:", error)
+    
+    finally:
+        if conn:
+            closeConnectionDB(cur, conn)
+
 
 
 
@@ -67,3 +72,78 @@ def getUser(username):
     
     except(Exception, psycopg2.Error) as error:
         print("Failed to get user from database:", error)
+    
+    finally:
+        if conn:
+            closeConnectionDB(cur, conn)
+
+
+
+def updateUser(userUpdate, userName, firstName, lastName, fullName, email):
+    try:
+        cur, conn = startConnectionDB()
+
+        cur.execute('''
+                        UPDATE usuarios
+                        SET 
+                            username= %s,
+                            firstName=%s,
+                            lastName=%s,
+                            fullName=%s,
+                            email=%s
+                        WHERE 
+                            username=%s
+                    '''
+                    ,(userName, firstName, lastName, fullName, email, userUpdate)
+                    )
+
+        conn.commit()
+
+        closeConnectionDB(cur, conn)
+        
+    
+    except(Exception, psycopg2.Error) as error:
+        print("Failed to update user data in database: ", error)
+    
+    finally:
+        if conn:
+            closeConnectionDB(cur, conn)
+
+
+def deleteUser(usertodelete):
+    try:
+        cur, conn = startConnectionDB()
+
+        cur.execute('DELETE FROM usuarios WHERE username=%s', (usertodelete,))
+
+        conn.commit()
+
+        closeConnectionDB(cur, conn)
+        
+    
+    except(Exception, psycopg2.Error) as error:
+        print("Failed to delete user in database: ", error)
+    
+    finally:
+        if conn:
+            closeConnectionDB(cur, conn)
+
+
+def getAllUsers():
+    try:
+        cur, conn = startConnectionDB()
+
+        cur.execute("SELECT * from usuarios")
+        
+        result = cur.fetchall()
+        
+        closeConnectionDB(cur, conn)
+        return result
+
+    
+    except(Exception, psycopg2.Error) as error:
+        print("Failed to get user from database:", error)
+    
+    finally:
+        if conn:
+            closeConnectionDB(cur, conn)

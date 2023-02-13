@@ -38,23 +38,52 @@ def home():
     return "<h1>Hello Word</h1>"
 
 
-@app.route("/addUser", methods = ['POST'])
-def addUser():
-   
-    data = request.get_json()
 
-    # Receive form data from front-end
-    firstName = (data['firstName']).capitalize()
-    lastName  = (data['lastName']).capitalize()
-    fullName = firstName + " " + lastName
-    email = data['email']
-    userName = data['username']
-    group = (data['group']['name']).lower()
+@app.route("/user", methods= ['GET', 'POST', 'PUT', 'DELETE'])
+def user():
     
-    print(data)
-    userDB.insertUser(userName, firstName, lastName, fullName, email)
+    if request.method == 'GET':
+        users = userDB.getAllUsers()
+        print(users)
+        return users
 
-    return data
+    if request.method == 'POST':
+
+        data = request.get_json()
+
+        firstName = (data['firstName']).capitalize()
+        lastName  = (data['lastName']).capitalize()
+        fullName = firstName + " " + lastName
+        email = data['email']
+        userName = data['username']
+
+        userDB.insertUser(userName, firstName, lastName, fullName, email)
+
+        return data
+
+    if request.method == 'PUT':
+        
+        data = request.get_json()
+
+        firstName = (data['firstName']).capitalize()
+        lastName  = (data['lastName']).capitalize()
+        fullName = firstName + " " + lastName
+        email = data['email']
+        userName = data['username']
+        userUpdate = data['userupdate']
+
+        userDB.updateUser(userUpdate, userName, firstName, lastName, fullName, email)
+
+        return data
+
+    if request.method == 'DELETE':
+        data = request.get_json()
+
+        userToDelete = data['usertodelete']
+
+        userDB.deleteUser(userToDelete)
+
+        return data
 
 
 @app.route("/createUser", methods = ['GET'])

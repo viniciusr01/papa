@@ -27,7 +27,7 @@ function FormularioCadastro(){
         console.log(user)
         
         
-        fetch('http://localhost:5000/addUser', {
+        fetch('http://localhost:5000/user', {
             method: 'POST',
             headers:{
                 'Content-Type': 'application/json',
