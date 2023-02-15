@@ -22,10 +22,9 @@ def startConnectionDB():
         return cur, conn
     
     except(Exception, psycopg2.Error) as error:
-        print("Failed to connect to the database", error)
+       return "Failed to connect to the database" + str(error)
 
 
-    
 
 def closeConnectionDB(cur, conn):
     cur.close()
@@ -46,9 +45,11 @@ def insertUser(username, firstName, lastName, fullName , email):
         conn.commit()
 
         closeConnectionDB(cur, conn)
+
+        return "Sucesso ao adicionar o usuário " + username
     
     except(Exception, psycopg2.Error) as error:
-        print("Failed to insert user into database:", error)
+        return "Failed to insert user into database:" + str(error)
     
     finally:
         if conn:
@@ -71,7 +72,7 @@ def getUser(username):
         
     
     except(Exception, psycopg2.Error) as error:
-        print("Failed to get user from database:", error)
+        return "Failed to get user from database:" + str(error)
     
     finally:
         if conn:
@@ -100,10 +101,12 @@ def updateUser(userUpdate, userName, firstName, lastName, fullName, email):
         conn.commit()
 
         closeConnectionDB(cur, conn)
+
+        return "Sucesso ao atulizar o usuário " + userName
         
     
     except(Exception, psycopg2.Error) as error:
-        print("Failed to update user data in database: ", error)
+        return "Failed to update user data in database: " +  str(error)
     
     finally:
         if conn:
@@ -120,9 +123,42 @@ def deleteUser(usertodelete):
 
         closeConnectionDB(cur, conn)
         
+        return "Sucesso ao deletar o usuário " + usertodelete
     
     except(Exception, psycopg2.Error) as error:
-        print("Failed to delete user in database: ", error)
+        return "Failed to delete user in database: " + str(error)
+    
+    finally:
+        if conn:
+            closeConnectionDB(cur, conn)
+
+
+
+def updateServicesFlags(username):
+    try:
+        cur, conn = startConnectionDB()
+
+        cur.execute('''
+                        UPDATE usuarios
+                        SET 
+                            iscreatedipa= %s,
+                            iscreatedgitlab=%s,
+                            iscreatedjenkins=%s
+                        WHERE 
+                            username=%s
+                    '''
+                    ,(True, True, False, username)
+                    )
+
+        conn.commit()
+
+        closeConnectionDB(cur, conn)
+
+        return "Sucesso ao atualizar flags de serviço"
+        
+    
+    except(Exception, psycopg2.Error) as error:
+        return "Failed to update services in database: " + str(error)
     
     finally:
         if conn:
@@ -142,7 +178,37 @@ def getAllUsers():
 
     
     except(Exception, psycopg2.Error) as error:
-        print("Failed to get user from database:", error)
+        return "Failed to get user from database:" + str(error)
+    
+    finally:
+        if conn:
+            closeConnectionDB(cur, conn)
+
+
+
+def updatePolicyID(username, policyID):
+    try:
+        cur, conn = startConnectionDB()
+
+        cur.execute('''
+                        UPDATE usuarios
+                        SET 
+                            policyid=%s
+                        WHERE 
+                            username=%s
+                    '''
+                    ,(policyID, username)
+                    )
+
+        conn.commit()
+
+        closeConnectionDB(cur, conn)
+
+        return "Sucesso ao atribuir uma política para o usuário"
+        
+    
+    except(Exception, psycopg2.Error) as error:
+        return "Failed to update policy id of user: " + str(error)
     
     finally:
         if conn:

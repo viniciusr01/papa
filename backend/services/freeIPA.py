@@ -1,4 +1,4 @@
-from python_freeipa import ClientMeta, exceptions
+from python_freeipa import ClientMeta
 
 
 

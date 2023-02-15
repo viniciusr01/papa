@@ -20,7 +20,7 @@ cur = conn.cursor()
 cur.execute('DROP TABLE IF EXISTS usuarios;')
 
 cur.execute('CREATE TABLE usuarios (username varchar (100) PRIMARY KEY NOT NULL,'
-                                 'idPolitica integer,'
+                                 'policyID integer [],'
                                  'firstName varchar (250) NOT NULL,'
                                  'lastName varchar (250) NOT NULL,'
                                  'fullName varchar (250) NOT NULL,'
@@ -33,9 +33,9 @@ cur.execute('CREATE TABLE usuarios (username varchar (100) PRIMARY KEY NOT NULL,
 
 cur.execute('DROP TABLE IF EXISTS politicas;')
 
-cur.execute('CREATE TABLE politicas (idPolitica serial PRIMARY KEY NOT NULL,'
+cur.execute('CREATE TABLE politicas (policyID serial PRIMARY KEY NOT NULL,'
                                  'name varchar (250) NOT NULL,'
-                                 'projectsGitlab varchar [],'
+                                 'projectsGitlab JSONB,'
                                  'groupIPA varchar(250),'
                                  'date_added date DEFAULT CURRENT_TIMESTAMP);'
                                  )

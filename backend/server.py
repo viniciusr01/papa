@@ -5,6 +5,7 @@ from flask import request
 import sys
 sys.path.insert(0,"..")
 from db import userDB
+from db import politicaDB
 
 # Environment variables 
 from dotenv import load_dotenv
@@ -44,7 +45,6 @@ def user():
     
     if request.method == 'GET':
         users = userDB.getAllUsers()
-        print(users)
         return users
 
     if request.method == 'POST':
@@ -57,9 +57,9 @@ def user():
         email = data['email']
         userName = data['username']
 
-        userDB.insertUser(userName, firstName, lastName, fullName, email)
+        result = userDB.insertUser(userName, firstName, lastName, fullName, email)
 
-        return data
+        return result
 
     if request.method == 'PUT':
         
@@ -72,76 +72,153 @@ def user():
         userName = data['username']
         userUpdate = data['userupdate']
 
-        userDB.updateUser(userUpdate, userName, firstName, lastName, fullName, email)
+        result = userDB.updateUser(userUpdate, userName, firstName, lastName, fullName, email)
 
-        return data
+        return result
 
     if request.method == 'DELETE':
         data = request.get_json()
 
         userToDelete = data['usertodelete']
 
-        userDB.deleteUser(userToDelete)
+        result = userDB.deleteUser(userToDelete)
 
-        return data
+        return result
 
 
-@app.route("/createUser", methods = ['GET'])
+@app.route("/user/create", methods = ['POST'])
 def createUser():
 
-    #data = request.get_json()
-    #userName = data['username']
-
-    userName = 'viniciusr01'
-    result = userDB.getUser(userName)
+    try:
+        data = request.get_json()
+        userName = data['username']
     
-    userName = result[0]
-    firstName = result[2]
-    lastName  = result[3]
-    email = result[5]
+        result = userDB.getUser(userName)
+        
+        userName = result[0]
+        firstName = result[2]
+        lastName  = result[3]
+        
+        #email = result[5]
+        
+        # The full name is the same as the username because LDAP uses full name as cn
+        fullName = result[0]
+    
+        # Add user in FreeIPA
+        userIPA = IPA.addUserIPA(firstName, lastName, fullName, userName)
+        randonPassword = userIPA['result']['randompassword']
+        print("A senha e: ", randonPassword)
+    
+        # Authenticate to GitLab to create a user
+        GL.createUserGitLab(userName, randonPassword)
+        
+        # TO DO
+        # UPDATE USER IN DB
+        userDB.updateServicesFlags(userName)
+        
+        return "Sucesso ao criar o usuário: " + userName
 
-    # The full name is the same as the username because LDAP uses full name as cn
-    fullName = result[0]
- 
-    # Add user in FreeIPA
-    userIPA = IPA.addUserIPA(firstName, lastName, fullName, userName)
-    randonPassword = userIPA['result']['randompassword']
-   
-    # Authenticate to GitLab to create a user
-    GL.createUserGitLab(userName, randonPassword)
+    except Exception as erro:
+        return "Failed to create user: " + str(erro)
 
-    # TO DO
-    # UPDATE USER IN DB
-    #
 
-    return "Sucesso ao criar usuário"
+
+@app.route("/user/policy", methods = ['POST'])
+def userPolicy():
+
+    try:
+        data = request.get_json()
+        userNames = data['usernames']
+        policyID = data['policyid']
+    
+        for user in userNames:
+            userDB.updatePolicyID(user, policyID)
+
+        return "Sucesso ao atribuir uma política para o(s) usuário(s)" 
+
+    except Exception as erro:
+        return "Failed to update policy id of user: " + str(erro)
 
     
+@app.route("/gitlab")
+@app.route("/gitlab/project", methods = ['GET', 'POST'])
+def projectGitLab():
+    
 
-@app.route("/getProjecstGitLab", methods = ['GET'])
-def getProjecsGitLab():
-    return GL.getProjecstGitLab()
+    if request.method == 'GET':
+        return GL.getProjectsGitLab()
+
+    if request.method == 'POST':
+
+        data = request.get_json()
+
+        username  = data['username']
+        idProject = data['idproject']
+        accessLevel= data['accesslevel']
+      
+        return GL.putUserInAProject(username, idProject, accessLevel)
 
 
-@app.route("/getGroupsIPA", methods = ['GET'])
+@app.route("/ipa")
+@app.route("/ipa/getGroups", methods = ['GET'])
 def getGroupsIPA():
     print(IPA.getGroupsIPA())
     return IPA.getGroupsIPA()
 
 
-@app.route("/addUserProject", methods = ['GET'])
-def addUserProject():
+@app.route("/policy", methods = ['GET', 'POST', 'PUT', 'DELETE'])
+def policiesPIPA():
     
-    #  Need to finalize
-    #  In test
-    import gitlab
-    username='usera02' 
-    idProject=6
-    accessLevel= gitlab.const.AccessLevel.DEVELOPER
-    print(type(accessLevel))
+    if request.method == 'GET':
+        try:
+            policies = politicaDB.getAllPolicies()
+            return policies
+        except Exception as error:
+            return "Failed to get the policy from database:" + str(error)
 
+    if request.method == 'POST':
 
-    return GL.putUserInAProject(username, idProject, accessLevel)
-    
+        try:
+            data = request.get_json()
+            
+            policyName = data['policyname']
+            projectsGitLab  = data['projectsgitlab']
+            groupIPA = data['groupipa']
+
+            result = politicaDB.insertPolicy(policyName, projectsGitLab, groupIPA)
+           
+            return result
+
+        except Exception as error:
+             return "Failed to insert the policy into database:" + str(error)
+
+    if request.method == 'PUT':
+        try:
+            data = request.get_json()
+
+            policyID   = data['policyid'] 
+            policyName = data['policyname']
+            projectsGitLab  = data['projectsgitlab']
+            groupIPA = data['groupipa']
+
+            result = politicaDB.updatePolicy(policyID, policyName, projectsGitLab, groupIPA)
+
+            return result
+
+        except Exception as error:
+            return "Failed to update policy data in database: " + str(error)
+
+    if request.method == 'DELETE':
+        try:
+            data = request.get_json()
+
+            policyToDelete = data['policytodelete']
+            result = politicaDB.deletePolicy(policyToDelete)
+
+            return result
+
+        except Exception as error:
+            return "Failed to delete the policy in database: " + str(error)
+
 
 app.run()

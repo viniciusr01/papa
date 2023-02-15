@@ -40,34 +40,53 @@ class GitLab():
 
         return gl
 
+    def getProjectsGitLab(self):
 
-    def getProjecstGitLab(self):
+        try:
+            gl = self.createConnectionWithGitLab()
 
-        gl = self.createConnectionWithGitLab()
+            projects = gl.projects.list()
+            dictOfProjects = {}
 
-        projects = gl.projects.list()
-        dictOfProjects = {}
+            for p in projects:
+                dictOfProjects.update( {p.name:{'id': p.id, 'name': p.name }})
 
-        for p in projects:
-            dictOfProjects.update( {p.name:{'id': p.id, 'name': p.name }})
+            return dictOfProjects
+        
+        except Exception as erro:
+             return "Failed to get projecst in Gitlab: " + str(erro)
 
-        return dictOfProjects
 
 
-    # Need to finalize
     def putUserInAProject(self, userName, idProject, accessLevel):
 
-        gl = self.createConnectionWithGitLab()
+        try:
+            gl = self.createConnectionWithGitLab()
 
-        user = gl.users.list(search=userName)
-        idUser = user[0].id
+            user = gl.users.list(search=userName)
+            idUser = user[0].id
 
-        project = gl.projects.get(idProject)
+            project = gl.projects.get(idProject)
 
-        member = project.members.create({ 'user_id': idUser,
-                                          'access_level': accessLevel})
+            if(accessLevel == 'Guest'):
+                accessLevel = gitlab.const.AccessLevel.GUEST
+            if(accessLevel == 'Reporter'):
+                accessLevel = gitlab.const.AccessLevel.REPORTER
+            if(accessLevel == 'Developer'):
+                accessLevel = gitlab.const.AccessLevel.DEVELOPER
+            if(accessLevel == 'Maintainer'):
+                accessLevel = gitlab.const.AccessLevel.MAINTAINER
+            if(accessLevel == 'Owner'):
+                accessLevel = gitlab.const.AccessLevel.OWNER
 
-        return member
+            member = project.members.create({ 'user_id': idUser,
+                                            'access_level': accessLevel})
+
+            return "O usuário " + userName + " foi adicionado ao projeto com sucesso!"
+
+        except Exception as erro:
+            return "Failed to put user in a Gitlab project: " + str(erro)
+
 
 
     # Need to finalize
