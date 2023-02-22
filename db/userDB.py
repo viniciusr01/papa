@@ -62,7 +62,7 @@ def getUser(username):
     try:
         cur, conn = startConnectionDB()
 
-        cur.execute("SELECT * from usuarios WHERE username = %s", (username,))
+        cur.execute("SELECT username, policyid, firstname, lastname, fullname, email FROM usuarios WHERE username = %s", (username,))
         
         result = cur.fetchone()
         
@@ -72,7 +72,7 @@ def getUser(username):
         
     
     except(Exception, psycopg2.Error) as error:
-        return "Failed to get user from database:" + str(error)
+        return "Failed to get user from database: " + str(error)
     
     finally:
         if conn:
@@ -190,18 +190,38 @@ def updatePolicyID(username, policyID):
     try:
         cur, conn = startConnectionDB()
 
-        cur.execute('''
+        print("UPDATE POLICY")
+      
+        cur.execute("SELECT policyid from usuarios where username=%s", (username,))
+        result = cur.fetchone()
+
+        print("The result is: ", result[0])
+        policyIds = []
+
+        
+        for policies in result[0]:
+            policyIds.append(policies)
+
+        policyIds.append(policyID)
+        
+        
+
+        print("The polyci ID is:", policyIds)
+        
+        '''
+        cur.execute(
+                    
                         UPDATE usuarios
                         SET 
                             policyid=%s
                         WHERE 
                             username=%s
-                    '''
-                    ,(policyID, username)
+                 
+                    ,(policyIds, username)
                     )
 
         conn.commit()
-
+        '''
         closeConnectionDB(cur, conn)
 
         return "Sucesso ao atribuir uma política para o usuário"

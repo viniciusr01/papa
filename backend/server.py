@@ -1,6 +1,8 @@
 from flask import Flask 
 from flask_cors import CORS
 from flask import request
+import json
+
 
 import sys
 sys.path.insert(0,"..")
@@ -42,10 +44,16 @@ def home():
 
 @app.route("/user", methods= ['GET', 'POST', 'PUT', 'DELETE'])
 def user():
-    
+        
     if request.method == 'GET':
-        users = userDB.getAllUsers()
-        return users
+        username = request.args.get("username")
+        
+        if username == None:
+            users = userDB.getAllUsers()
+            return users
+        else:
+            user = userDB.getUser(username)
+            return json.dumps(user)
 
     if request.method == 'POST':
 
@@ -162,7 +170,6 @@ def projectGitLab():
 @app.route("/ipa")
 @app.route("/ipa/getGroups", methods = ['GET'])
 def getGroupsIPA():
-    print(IPA.getGroupsIPA())
     return IPA.getGroupsIPA()
 
 
@@ -180,12 +187,14 @@ def policiesPIPA():
 
         try:
             data = request.get_json()
+            print(data)
             
             policyName = data['policyname']
             projectsGitLab  = data['projectsgitlab']
             groupIPA = data['groupipa']
 
-            result = politicaDB.insertPolicy(policyName, projectsGitLab, groupIPA)
+            result = 0
+            #result = politicaDB.insertPolicy(policyName, projectsGitLab, groupIPA)
            
             return result
 
