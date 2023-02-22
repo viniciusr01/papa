@@ -3,7 +3,7 @@ import Select from '../components/form/Select';
 import SubmitButton from '../components/form/SubmitButton';
 import styles from './PermissoesGrupo.module.css'
 
-function PermissoesGrupo(){
+function PermissoesGrupo(project){
     
     const permissions = [
         {"id": 1, "name": "Ler"}, 
@@ -18,17 +18,11 @@ function PermissoesGrupo(){
         <div className={styles.form_container}>
             
             <h1>Serviços e Permissões</h1>
-            <p> Este grupo possui as seguintes permissões:</p>
+            <p> `${project.name}`possui as seguintes permissões:</p>
 
             <form  className={styles.form}>    
             <Select name="grupo_id" 
                         text="Gitlab"
-                        options={permissions}
-                        
-                />
-
-            <Select name="grupo_id" 
-                        text="Jenkins"
                         options={permissions}
                         
                 />

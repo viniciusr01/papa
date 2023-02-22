@@ -180,6 +180,7 @@ def policiesPIPA():
 
         try:
             data = request.get_json()
+            print(data)
             
             policyName = data['policyname']
             projectsGitLab  = data['projectsgitlab']

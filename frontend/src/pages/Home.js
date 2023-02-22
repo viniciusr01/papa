@@ -9,7 +9,7 @@ function Home(){
     return (
         <div className={styles.Body}>
            <div className={styles.Container}>
-                    <button className={styles.btn} onClick={() => history("/criargrupo")}><h1>Criar grupo de usuários</h1></button>
+                    <button className={styles.btn} onClick={() => history("/criarpolitica")}><h1>Criar nova Política</h1></button>
                 </div>
 
                 <div className={styles.Container}>
@@ -17,11 +17,11 @@ function Home(){
                 </div>
 
                 <div className={styles.Container}>
-                    <button className={styles.btn} onClick={() => history("/criargrupo")}><h1>Adicionar usuários a um grupo</h1></button>
+                    <button className={styles.btn} onClick={() => history("/politicaespecifica")}><h1>Adicionar usuários a uma política</h1></button>
                 </div>
 
                 <div className={styles.Container}>
-                    <button className={styles.btn} onClick={() => history("/grupos")}><h1>Visualizar grupos vigentes</h1></button>
+                    <button className={styles.btn} onClick={() => history("/grupos")}><h1>Visualizar políticas vigentes</h1></button>
                 </div>
         </div>
     )
