@@ -4,6 +4,7 @@ from flask import request
 import json
 
 
+
 import sys
 sys.path.insert(0,"..")
 from db import userDB
@@ -36,10 +37,10 @@ GL  = GitLab(GITLAB_DOMAIN, GITLAB_ROOT_USERNAME, GITLAB_ROOT_PASSWORD)
 app = Flask("PAPA - Backend")
 CORS(app)
 
+
 @app.route("/")
 def home():
     return "<h1>Hello Word</h1>"
-
 
 
 @app.route("/user", methods= ['GET', 'POST', 'PUT', 'DELETE'])
@@ -175,13 +176,23 @@ def getGroupsIPA():
 
 @app.route("/policy", methods = ['GET', 'POST', 'PUT', 'DELETE'])
 def policiesPIPA():
-    
-    if request.method == 'GET':
-        try:
-            policies = politicaDB.getAllPolicies()
-            return policies
-        except Exception as error:
-            return "Failed to get the policy from database:" + str(error)
+
+
+    if request.method == 'GET': 
+        policyID = request.args.get("policyid")
+
+        if policyID == None:
+            try:
+                policies = politicaDB.getAllPolicies()
+                return policies
+            except Exception as error:
+                return "Failed to get the policy from database: " + str(error)
+        else:
+            try:
+                policy = politicaDB.getPolicy(policyID)
+                return json.dumps(policy)
+            except Exception as error:
+                return "Failed to get the policy from database: " + str(error)
 
     if request.method == 'POST':
 
@@ -235,4 +246,4 @@ def policiesPIPA():
             return "Failed to delete the policy in database: " + str(error)
 
 
-app.run()
+app.run(debug=True)
