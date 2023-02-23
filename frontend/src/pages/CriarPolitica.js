@@ -13,7 +13,7 @@ function CriarPolítica(){
         {"value": 2, "label": "lemonade"}, 
         {"value": 3, "label": "lins"}, 
         {"value": 4, "label": "pipa"}
-       ]
+       ] 
 
        const groups = [
         {"id": 1, "name": "A01"}, 
@@ -22,10 +22,29 @@ function CriarPolítica(){
         {"id": 4, "name": "D01"}
        ]
 
+    const [selectedProjectsgitlab, setSelectedProjectsgitlab] = useState([]);
     const [projectsgitlab, setProjectsgitlab] = useState([]);
-    const [groupipa, setGroupipa] = useState([]);
-    
+    const [groupsipa, setGroupsipa] = useState([]);
+    const [selectedGroupipa, setSelectedGroupipa] = useState([]);
     const [policy, setPolicy] = useState([]);
+
+    /*const projects = projectsgitlab?.map((project) => [
+        {"label": `${project[0]}`, "value": `${project[0]}`}
+    ])*/
+
+    /*const groups = groupsipa?.map((group) => [
+        {"id": `${group[0]}`, "value": `${group[1]}`}
+    ])*/
+
+    /*useEffect(() => {
+        const responsegitlab =  fetch ('http://localhost:5000/gitlab/project', {method: 'GET'})
+        .then(responsegitlab => responsegitlab.json()
+        .then(data => setProjectsgitlab(data)));
+
+        const responseipa =  fetch ('http://localhost:5000/ipa/getGroups', {method: 'GET'})
+        .then(responseipa => responseipa.json()
+        .then(data => setGroupsipa(data)));
+      });*/
 
     function sendRequestForAddPolicy(policy){
         console.log(policy)
@@ -49,9 +68,9 @@ function CriarPolítica(){
     const submit = (e) => {
         e.preventDefault()
        
-        setPolicy({ ...policy, policyname: e.target.value, projectsgitlab: [projectsgitlab], groupipa: groupipa})
+        setPolicy({ ...policy, policyname: e.target.value, projectsgitlab: [selectedProjectsgitlab], groupipa: selectedGroupipa})
         sendRequestForAddPolicy(policy) 
-        console.log(projectsgitlab, groupipa, "onsubmit")
+        console.log(selectedProjectsgitlab, selectedGroupipa, "onsubmit")
     }
 
     function handleChange(e){
@@ -64,9 +83,9 @@ function CriarPolítica(){
     }
 
     const handleProjects = (item) => {
-        setProjectsgitlab(item);
+        setSelectedProjectsgitlab(item);
         console.log("handleproj", projectsgitlab);
-        setPolicy({ ...policy, projectsgitlab: projectsgitlab})
+        setPolicy({ ...policy, projectsgitlab: selectedProjectsgitlab})
     }
 
     
@@ -75,15 +94,15 @@ function CriarPolítica(){
      
         <div className={styles.form_container}>
             
-            <h1>Nova Política</h1>
-            <p> Formulário para criação de nova política de usuários para acesso aos serviços do ambiente do GSI/MPMG</p>
+            <h1>Novo Grupo</h1>
+            <p> Formulário para criação de novo grupo de usuários para acesso aos serviços do ambiente do GSI/MPMG</p>
 
             <form onSubmit={submit} className={styles.form}>    
 
                 <Input type="text" 
-                        text="Nome da política"
+                        text="Nome do grupo"
                         name="policyname"
-                        placeholder=" Insira o nome da política"
+                        placeholder=" Insira o nome do grupo"
                         handleOnChange={handleChange}
                 />
 
@@ -110,7 +129,7 @@ function CriarPolítica(){
                         
                 />
 
-            <SubmitButton text="Criar política" />
+            <SubmitButton text="Criar grupo" />
             </form>
 
         </div>

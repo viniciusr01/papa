@@ -18,7 +18,7 @@ function Politicas(){
       return (
         <div>
           <div className={styles.AreaBotao}>
-            <button className={styles.btn} onClick={() => navigate('/criarpolitica')}>Criar nova política</button>
+            <button className={styles.btn} onClick={() => navigate('/criarpolitica')}>Criar novo grupo</button>
           </div>
 
           <div className={styles.Usuarios}>
@@ -26,7 +26,7 @@ function Politicas(){
                 <div className={styles.Usuario}>
                   <h3>{policy[1]}</h3> 
                   <h5 className = {styles.Link} onClick={() => navigate('/politicaespecifica')}>
-                Informações sobre política</h5>
+                Informações sobre grupo</h5>
               </div>)}
           </div>
         </div>

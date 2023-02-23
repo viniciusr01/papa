@@ -7,14 +7,14 @@ function Navbar(){
     return (
     
     <nav className={styles.navbar}>     
-        <h1 style={{color: 'white'}}>PAPA</h1>
+        <h1 style={{color: 'white'}}>PIPA</h1>
     
 
     <ul className={styles.list}>
         <li className={styles.item}><Link to="/">Home</Link></li>
         <li className={styles.item}><Link to="/cadastro">Fomulário Cadastro</Link></li>
         <li className={styles.item}><Link to="/usuarios">Usuários</Link></li>
-        <li className={styles.item}><Link to="/politicas">Políticas</Link></li>
+        <li className={styles.item}><Link to="/politicas">Grupos</Link></li>
     </ul>
 
     </ nav>

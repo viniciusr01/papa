@@ -4,7 +4,7 @@ function Footer(){
     return(
         <footer className={styles.footer}>
             <ul className={styles.list}> 
-                <p>Protótipo PAPA</p>
+                <p>Protótipo PIPA</p>
             </ul>
         </footer>
     )

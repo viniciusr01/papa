@@ -19,8 +19,8 @@ function Usuarios(){
       <div className={styles.Usuarios}>
         {users?.map((user) => 
             <div className={styles.Usuario}>
-              <h3>{user[0]}</h3> 
-              <h5 className = {styles.Link} onClick={() => navigate('/infousuario')}>
+              <h3>Username: {user[0]}</h3> 
+              <h5 className = {styles.Link} onClick={() => navigate('/user/infousuario', {username: user[0]})}>
                 Informações sobre usuário</h5>
           </div>)}
       </div>
