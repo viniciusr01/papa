@@ -187,15 +187,20 @@ def policiesPIPA():
 
         try:
             data = request.get_json()
-            print(data)
             
             policyName = data['policyname']
-            projectsGitLab  = data['projectsgitlab']
-            groupIPA = data['groupipa']
+                 
+            projectsGitLab = {}
+            for p in data['projectsgitlab']:
+                pID = p['value']
+                pName = p['label']
+                pGL = {pName: {'id': pID, 'name': pName}}
+                projectsGitLab.update(pGL)
+                
+            groupIPA = data['groupipa']['name']
 
-            result = 0
-            #result = politicaDB.insertPolicy(policyName, projectsGitLab, groupIPA)
-           
+            result = politicaDB.insertPolicy(policyName, projectsGitLab, groupIPA)
+            
             return result
 
         except Exception as error:
