@@ -177,7 +177,6 @@ def getGroupsIPA():
 @app.route("/policy", methods = ['GET', 'POST', 'PUT', 'DELETE'])
 def policiesPIPA():
 
-
     if request.method == 'GET': 
         policyID = request.args.get("policyid")
 

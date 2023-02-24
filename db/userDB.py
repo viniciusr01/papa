@@ -1,4 +1,5 @@
 import psycopg2
+from psycopg2.extras import Json, DictCursor
 from dotenv import load_dotenv
 from pathlib import Path
 import os
@@ -17,7 +18,7 @@ def startConnectionDB():
                 user= os.getenv('DB_USERNAME'),
                 password= os.getenv('DB_PASSWORD'))
 
-        cur = conn.cursor()
+        cur = conn.cursor(cursor_factory=DictCursor)
 
         return cur, conn
     
@@ -169,7 +170,7 @@ def getAllUsers():
     try:
         cur, conn = startConnectionDB()
 
-        cur.execute("SELECT * from usuarios")
+        cur.execute("SELECT username, policyid, firstname, lastname, fullname, email from usuarios")
         
         result = cur.fetchall()
         

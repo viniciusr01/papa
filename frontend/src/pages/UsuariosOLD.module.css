@@ -1,0 +1,29 @@
+.Usuarios {
+    width: 100%;
+    display: grid;
+    grid-gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(250px,1fr));
+}
+
+.Usuario {
+    display: flex;
+    flex-direction: column;
+    background-color:gray;
+    margin: 20px;
+    align-items: center;
+    padding: 10px;
+    height: 16vh;
+    width: 20vw;
+}
+
+.Link {
+    color: black;
+    text-decoration: underline;
+    cursor: pointer;
+    margin-top: 30px;
+}
+
+.Link:hover {
+    color: #ED0000;
+   
+}

@@ -64,7 +64,7 @@ def getPolicy(policyID):
     try:
         cur, conn = startConnectionDB()
 
-        cur.execute("SELECT * FROM politicas WHERE policyID = %s", (policyID,))
+        cur.execute("SELECT policyid, name, projectsgitlab, groupipa FROM politicas WHERE policyID = %s", (policyID,))
         
         result = cur.fetchone()
         
