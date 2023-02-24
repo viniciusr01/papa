@@ -3,8 +3,8 @@ import { Navigate, useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom';
 import React, { useState, useEffect, useReducer } from 'react';
 
+import { makeStyles } from '@mui/material/styles';
 
-import { styled } from '@material-ui/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -17,17 +17,11 @@ import Paper from '@mui/material/Paper';
 
 import EditIcon from '@mui/icons-material/Edit';
 import Button from '@mui/material/Button';
-
-/*
-const MyTableContainer = styled(TableContainer)({
-    width: '80%',
-    margin: '0 auto',
-    padding: '0.5em'
-});
-*/
+import { fontWeight } from '@mui/system';
 
 
-function Usuarios2(){
+
+function Usuarios(){
 
     
     const [usuarios, setUsuarios] = useState([])
@@ -52,15 +46,17 @@ function Usuarios2(){
 
     return (
 
-        <div className={styles.table_container}>
+        <div className={styles.usuarios_container}>
+          <h1> Usuários </h1>
+
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead >
-                <TableRow  >
-                  <TableCell>Nome</TableCell>
-                  <TableCell align="right">email</TableCell>
-                  <TableCell align="right">Username&nbsp;</TableCell>
-                  <TableCell align="right">Ação</TableCell>
+              <TableHead>
+                <TableRow>
+                  <TableCell sx={{ fontWeight: 'bold', fontSize: 16 }} >Nome</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', fontSize: 16 }} align="center">Email</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', fontSize: 16 }} align="center">Username&nbsp;</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', fontSize: 16 }} align="center">Ação</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -72,11 +68,11 @@ function Usuarios2(){
                     <TableCell component="th" scope="row">
                       {row[4]}
                     </TableCell>
-                    <TableCell align="right">{row[5]}</TableCell>
-                    <TableCell align="right">{row[0]}</TableCell>
-                    <TableCell align="right">
+                    <TableCell align="center">{row[5]}</TableCell>
+                    <TableCell align="center">{row[0]}</TableCell>
+                    <TableCell align="center">
                         <Button component={Link} to={`/usuario/${row[0]}`} variant="outlined" startIcon={<EditIcon />}>
-                          Editar
+                          Alterar
                         </Button>
                     </TableCell>
                   </TableRow>
@@ -93,4 +89,4 @@ function Usuarios2(){
 
 
 
-export default Usuarios2;
+export default Usuarios;

@@ -49,7 +49,7 @@ class GitLab():
             dictOfProjects = {}
 
             for p in projects:
-                dictOfProjects.update( {p.name:{'id': p.id, 'name': p.name }})
+                dictOfProjects.update( {p.name:{'value': p.id, 'label': p.name }})
 
             return dictOfProjects
         
