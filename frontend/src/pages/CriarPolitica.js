@@ -8,43 +8,54 @@ import Select from '../components/form/Select';
 
 function CriarPolítica(){
 
-    const projects = [
-        {"value": 1, "label": "Monitoring"}, 
-        {"value": 2, "label": "lemonade"}, 
-        {"value": 3, "label": "lins"}, 
-        {"value": 4, "label": "pipa"}
-       ] 
-
-       const groups = [
-        {"id": 1, "name": "A01"}, 
-        {"id": 2, "name": "A02"}, 
-        {"id": 3, "name": "C01"}, 
-        {"id": 4, "name": "D01"}
-       ]
-
     const [selectedProjectsgitlab, setSelectedProjectsgitlab] = useState([]);
     const [projectsgitlab, setProjectsgitlab] = useState([]);
     const [groupsipa, setGroupsipa] = useState([]);
     const [selectedGroupipa, setSelectedGroupipa] = useState([]);
     const [policy, setPolicy] = useState([]);
 
-    /*const projects = projectsgitlab?.map((project) => [
-        {"label": `${project[0]}`, "value": `${project[0]}`}
-    ])*/
+    const groups = [
+        {"id": 9999, "name": "A01"}, 
+        {"id": 207423, "name": "A02"}, 
+        {"id": 376443, "name": "C01"}, 
+        {"id": 55674, "name": "D01"}
+       ]
 
-    /*const groups = groupsipa?.map((group) => [
-        {"id": `${group[0]}`, "value": `${group[1]}`}
-    ])*/
+    useEffect(() => {
+        const projectsgitlabArray = [];
+        fetch('http://localhost:5000/gitlab/project',{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((resp) => resp.json())
+            .then((data) => {
+                Object.keys(data).map((key) => { 
+                    projectsgitlabArray.push(data[key]);
 
-    /*useEffect(() => {
-        const responsegitlab =  fetch ('http://localhost:5000/gitlab/project', {method: 'GET'})
-        .then(responsegitlab => responsegitlab.json()
-        .then(data => setProjectsgitlab(data)));
+                });
+            }).then(setProjectsgitlab(projectsgitlabArray))
+            .catch((error)=> console.log(error))
+        },[]);
 
-        const responseipa =  fetch ('http://localhost:5000/ipa/getGroups', {method: 'GET'})
-        .then(responseipa => responseipa.json()
-        .then(data => setGroupsipa(data)));
-      });*/
+    useEffect(() => {
+        console.log("tá entrando aqui");
+            const groupsIPAArray = [];
+        fetch('http://localhost:5000/ipa/getGroups',{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((resp) => resp.json())
+            .then((data) => {console.log(data)
+            Object.keys(data).map((key) => groupsIPAArray.push({id: Number(data[key].id), name: data[key].name}));
+            }).then(() => { 
+            setGroupsipa(groupsIPAArray)})
+            .catch((error)=> console.log(error))
+    },[]);
+
 
     function sendRequestForAddPolicy(policy){
         console.log(policy)
@@ -58,19 +69,16 @@ function CriarPolítica(){
             body: JSON.stringify(policy),
         })
             .then( (resp) => resp.json())
-            .then( (data) => { 
-                console.log(data)
-            })
             .catch((err)  => console.log(err))
         
     }
 
+    
     const submit = (e) => {
         e.preventDefault()
-       
-        setPolicy({ ...policy, policyname: e.target.value, projectsgitlab: [selectedProjectsgitlab], groupipa: selectedGroupipa})
-        sendRequestForAddPolicy(policy) 
-        console.log(selectedProjectsgitlab, selectedGroupipa, "onsubmit")
+       const newState = {...policy, projectsgitlab: selectedProjectsgitlab};
+        setPolicy(newState);
+        sendRequestForAddPolicy(newState) 
     }
 
     function handleChange(e){
@@ -85,7 +93,7 @@ function CriarPolítica(){
     const handleProjects = (item) => {
         setSelectedProjectsgitlab(item);
         console.log("handleproj", projectsgitlab);
-        setPolicy({ ...policy, projectsgitlab: selectedProjectsgitlab})
+       /* setPolicy({ ...policy, projectsgitlab: selectedProjectsgitlab})*/
     }
 
     
@@ -112,7 +120,7 @@ function CriarPolítica(){
                 <MultipleSelect 
                 name="projectsgitlab"
                 onChange={handleProjects}
-                isMulti options={projects}
+                isMulti options={projectsgitlab}
                 isClearable={true}
                 isSearchable={true}
                 isDisabled={false}
@@ -121,13 +129,14 @@ function CriarPolítica(){
                 
 
                 <h4>Grupo do FreeIPA ao qual os usuários terão acesso.</h4>
-                        
-                <Select name="grupo_id" 
+                
+                {!!groupsipa.length && (<Select name="grupo_id" 
                         text="Selecione o grupo"
-                        options={groups}
+                        options={groupsipa}
                         handleOnChange={handleGroup}
                         
-                />
+                />)}
+                
 
             <SubmitButton text="Criar grupo" />
             </form>
