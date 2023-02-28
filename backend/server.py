@@ -104,14 +104,14 @@ def createUser():
     
         result = userDB.getUser(userName)
         
-        userName = result[0]
-        firstName = result[2]
-        lastName  = result[3]
+        userName = result['username']
+        firstName = result['firstname']
+        lastName  = result['lastname']
         
         #email = result[5]
         
         # The full name is the same as the username because LDAP uses full name as cn
-        fullName = result[0]
+        fullName = result['username']
     
         # Add user in FreeIPA
         userIPA = IPA.addUserIPA(firstName, lastName, fullName, userName)
@@ -204,7 +204,7 @@ def policiesPIPA():
             for p in data['projectsgitlab']:
                 pID = p['value']
                 pName = p['label']
-                pGL = {pName: {'id': pID, 'name': pName}}
+                pGL = {pName: {"id": pID, "name": pName}}
                 projectsGitLab.update(pGL)
                 
             groupIPA = data['groupipa']['name']

@@ -6,7 +6,8 @@ import Usuarios from './pages/Usuarios';
 import Usuario from './pages/Usuario';
 import Navbar from './layout/Navbar';
 import Footer from './layout/Footer'
-import Politicas from './pages/Politicas';
+import GrupoPoliticas from './pages/GrupoPoliticas'
+import GrupoPolitica  from './pages/GrupoPolitica'
 import PermissoesGrupo from './pages/PermissoesGrupo';
 import CriarPolítica from './pages/CriarPolitica';
 import InfoUsuario from './pages/InfoUsuario';
@@ -25,7 +26,8 @@ function App() {
           <Route path="cadastro" element={<FormularioCadastro/>}></Route>
           <Route path="usuarios" element={<Usuarios/>}></Route>
           <Route path="usuario/:username" element={<Usuario/>}></Route>
-          <Route path="politicas" element={<Politicas/>}></Route>
+          <Route path="politicas" element={<GrupoPoliticas/>}></Route>
+          <Route path="politica/:policyID" element={<GrupoPolitica/>}></Route>
           <Route path="criarpolitica" element={<CriarPolítica/>}></Route>
           <Route path="permissoesgrupo" element={<PermissoesGrupo/>}></Route>
           <Route path="infousuario" element={<InfoUsuario/>}></Route>

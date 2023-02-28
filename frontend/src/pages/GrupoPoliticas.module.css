@@ -1,12 +1,11 @@
-
-.usuario_container {
+.grupoPoliticas_container {
     width: 80%;
     margin: 0 auto;
     padding: 0.5em;
     
 }
 
-.usuario_container h1 {
+.grupoPoliticas_container h1 {
     font-weight: 700;
     color: white;
     margin: 1 auto;
@@ -17,19 +16,3 @@
 
 }
 
-
-.usuario_buttonsAction {
-    text-align: center;
-     
-
-}
-
-.usuario_container p{
-    font-weight: 700;
-    color: white;
-    padding: 0.5em;
-    background-color: #070904
-    ;
-
-
-}

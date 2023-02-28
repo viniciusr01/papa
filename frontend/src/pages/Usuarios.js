@@ -1,9 +1,7 @@
 import styles from './Usuarios.module.css'
-import { Navigate, useNavigate } from 'react-router-dom'  
 import { Link } from 'react-router-dom';
-import React, { useState, useEffect, useReducer } from 'react';
+import React, { useState, useEffect } from 'react';
 
-import { makeStyles } from '@mui/material/styles';
 
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -15,15 +13,12 @@ import Paper from '@mui/material/Paper';
 
 
 
-import EditIcon from '@mui/icons-material/Edit';
+import ReadMoreIcon from '@mui/icons-material/ReadMore';
 import Button from '@mui/material/Button';
-import { fontWeight } from '@mui/system';
-
 
 
 function Usuarios(){
 
-    
     const [usuarios, setUsuarios] = useState([])
 
     useEffect(() => {
@@ -36,7 +31,7 @@ function Usuarios(){
         })
             .then((resp) => resp.json())
             .then((data) => {
-                console.log(data[0][0])
+              console.log(data)
                 setUsuarios(data)
             })
             .catch((error)=> console.log(error))
@@ -48,7 +43,8 @@ function Usuarios(){
 
         <div className={styles.usuarios_container}>
           <h1> Usuários </h1>
-
+          
+          
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
@@ -61,19 +57,21 @@ function Usuarios(){
               </TableHead>
               <TableBody>
                 {usuarios.map((row) => (
+                  
                   <TableRow
-                    key={row[3]}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
-                      {row[4]}
+                      {row.fullname}
                     </TableCell>
-                    <TableCell align="center">{row[5]}</TableCell>
-                    <TableCell align="center">{row[0]}</TableCell>
+                    <TableCell align="center">{row.username}</TableCell>
+                    <TableCell align="center">{row.email}</TableCell>
                     <TableCell align="center">
-                        <Button component={Link} to={`/usuario/${row[0]}`} variant="outlined" startIcon={<EditIcon />}>
-                          Alterar
-                        </Button>
+
+                      <Button component={Link} to={`/usuario/${row.username}`} variant="outlined" startIcon={<ReadMoreIcon />}>
+                          Detalhes
+                      </Button>
+                       
                     </TableCell>
                   </TableRow>
                 ))}

@@ -1,5 +1,5 @@
 import psycopg2
-from psycopg2.extras import Json, DictCursor
+from psycopg2.extras import Json, RealDictCursor
 from dotenv import load_dotenv
 from pathlib import Path
 import os
@@ -18,7 +18,7 @@ def startConnectionDB():
                 user= os.getenv('DB_USERNAME'),
                 password= os.getenv('DB_PASSWORD'))
 
-        cur = conn.cursor(cursor_factory=DictCursor)
+        cur = conn.cursor(cursor_factory=RealDictCursor)
 
         return cur, conn
     
@@ -63,7 +63,7 @@ def getUser(username):
     try:
         cur, conn = startConnectionDB()
 
-        cur.execute("SELECT username, policyid, firstname, lastname, fullname, email FROM usuarios WHERE username = %s", (username,))
+        cur.execute("SELECT username, policyid, firstname, lastname, fullname, email, iscreatedipa, iscreatedgitlab FROM usuarios WHERE username = %s", (username,))
         
         result = cur.fetchone()
         

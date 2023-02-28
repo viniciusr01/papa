@@ -1,4 +1,4 @@
-import styles from './Usuario.module.css'
+import styles from './GrupoPolitica.module.css'
 
 import React from 'react';
 import { useParams } from 'react-router-dom'
@@ -13,11 +13,9 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import Button from '@mui/material/Button';
-
 
 
 import Dialog from '@mui/material/Dialog';
@@ -26,23 +24,27 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 
 
-function Usuario(){
+function GrupoPolitica(){
 
-    const { username } = useParams()
+    const { policyID } = useParams()
 
-    const [usuario, setUsuario] = useState([])
+    const [gpPolitica, setGpPolitica] = useState([])
+
+    const [glProjects, setGLProjects] = useState([])
 
     const [open, setOpen] = React.useState(false);
 
-    function deletarUsuario(username){
+    
+    function deletarGrupoPolitica(policyID){
 
-        fetch(`http://localhost:5000/user`,{
+        fetch(`http://localhost:5000/policy`,{
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                "usertodelete": username,
+                "policytodelete": policyID,
+                "teste": 'teste',
             })
         })
             .then((resp) => resp.json())
@@ -51,29 +53,11 @@ function Usuario(){
             })
             .catch((error)=> console.log(error))
 
-            window.location.replace(`http://localhost:3000/usuarios`);
+            window.location.replace(`http://localhost:3000/politicas`);
     }
 
 
-    function criarUsuarioIpaGitlab(username){
-        fetch(`http://localhost:5000/user/create`,{
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                "username": username,
-            })
-        })
-            .then((resp) => resp.json())
-            .then((data) => {
-                console.log(data)
-            })
-            .catch((error)=> console.log(error))
-
-            window.location.replace(`http://localhost:3000/usuario/${username}`);
-    }
-   
+ 
 
     const handleClose = () => {
       setOpen(false);
@@ -82,7 +66,7 @@ function Usuario(){
 
     useEffect(() => {
         
-        fetch(`http://localhost:5000/user?username=${username}`,{
+        fetch(`http://localhost:5000/policy?policyid=${policyID}`,{
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -91,7 +75,8 @@ function Usuario(){
             .then((resp) => resp.json())
             .then((data) => {
                 console.log(data)
-                setUsuario(data)
+                setGpPolitica(data)
+                setGLProjects(data.projectsgitlab)
             })
             .catch((error)=> console.log(error))
 
@@ -100,7 +85,7 @@ function Usuario(){
 
     return (
     
-        <div className={styles.usuario_container}>
+        <div className={styles.gpPolitica_container}>
 
         <div>
        
@@ -112,37 +97,37 @@ function Usuario(){
             >
                 <DialogContent>
                     <DialogContentText sx = {{color: 'black', fontWeight:'500'}}id="alert-dialog-description">
-                      Você tem certeza que dejesa deletar o usuário <b>{usuario.username}</b>?
+                      Você tem certeza que dejesa deletar o grupo de política <b>{gpPolitica.name}</b>?
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button sx= {{ backgroundColor: 'white', color: 'black', '&:hover': {backgroundColor: 'grey', color: 'white'} }} onClick={handleClose} variant="contained" >Cancelar</Button>
-                    <Button sx= {{ backgroundColor: 'white', color: 'red', '&:hover': {backgroundColor: 'red', color: 'white'} }} onClick={() => deletarUsuario(usuario.username)} variant="contained"> Deletar</Button>
+                    <Button sx= {{ backgroundColor: 'white', color: 'red', '&:hover': {backgroundColor: 'red', color: 'white'} }} onClick={() => deletarGrupoPolitica(gpPolitica.policyid)} variant="contained"> Deletar</Button>
                 </DialogActions>
             </Dialog>
         </div>
 
 
-            <h1> {usuario.fullname} </h1>
+            <h1> {gpPolitica.name} </h1>
+
             <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                 <TableRow>
-                    <TableCell sx={{ fontWeight: 'bold', fontSize: 16 }} >Username&nbsp;</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold', fontSize: 16 }} align="center">Email</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold', fontSize: 16 }} align="center">FreeIPA</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold', fontSize: 16 }} align="center">GitLab</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold', fontSize: 16 }} >Projetos do GitLab&nbsp;</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold', fontSize: 16 }} align="center">Grupo do FreeIPA</TableCell>
                 </TableRow>
                 </TableHead>
                 <TableBody>
                 
                     <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }} >
                         <TableCell component="th" scope="row">
-                            {usuario.username}
+                            {Object.keys(glProjects).map((item) => 
+                                    <li key={item}>{item}</li>
+                            )}
                         </TableCell>
-                        <TableCell align="center">{usuario.email}</TableCell>
-                        <TableCell align="center">{usuario.iscreatedipa === false ? 'Não' : 'Sim'}</TableCell>
-                        <TableCell align="center">{usuario.iscreatedgitlab  === false ? 'Não' : 'Sim'}</TableCell>
+                        <TableCell align="center">{gpPolitica.groupipa}</TableCell>
+                        
                         
                     </TableRow>
 
@@ -153,44 +138,32 @@ function Usuario(){
                 </TableBody>
             </Table>
 
-                <div className={styles.usuario_buttonsAction}>
+                <div className={styles.gpPolitica_buttonsAction}>
 
                 <p> Ações </p>
                 <br></br>
-                <Button sx={{ color:'green', borderColor: 'green' }} component={Link} to={`/usuario/${usuario[0]}`} variant="outlined" startIcon={<EditIcon />}>
-                    Alterar
-                </Button>
-                &ensp;
+               
                 <Button sx={{ color:'red', borderColor: 'red' }} onClick={() => (setOpen(true))} variant="outlined" startIcon={<DeleteIcon />}>
                     Deletar
                 </Button>
                 &ensp;
 
-                {usuario.iscreatedgitlab  === true 
-                ? 
-                
-                <Button  onClick={() => (criarUsuarioIpaGitlab(usuario.username))} variant="outlined" startIcon={<GroupAddIcon />} disabled>
-                    Criar usuário no IPA e no GitLab
+                <Button onClick={() => (console.log('button member'))} variant="outlined" startIcon={<GroupAddIcon />}>
+                    Adicionar Membros
                 </Button>
-                
-                : 
-
-                <Button  onClick={() => (criarUsuarioIpaGitlab(usuario.username))} variant="outlined" startIcon={<GroupAddIcon />}>
-                    Criar usuário no IPA e no GitLab
-                </Button>
-                
-                }
-                
                 &ensp;
+
+               
                 <br></br>
                 <br></br>
                 </div>
 
 
             </TableContainer>
+            
         </div>
      
     )
 }
 
-export default Usuario;
+export default GrupoPolitica;

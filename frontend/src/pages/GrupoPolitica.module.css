@@ -1,12 +1,12 @@
 
-.usuario_container {
+.gpPolitica_container {
     width: 80%;
     margin: 0 auto;
     padding: 0.5em;
     
 }
 
-.usuario_container h1 {
+.gpPolitica_container h1 {
     font-weight: 700;
     color: white;
     margin: 1 auto;
@@ -18,13 +18,13 @@
 }
 
 
-.usuario_buttonsAction {
+.gpPolitica_buttonsAction {
     text-align: center;
      
 
 }
 
-.usuario_container p{
+.gpPolitica_container p{
     font-weight: 700;
     color: white;
     padding: 0.5em;
