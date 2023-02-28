@@ -204,7 +204,7 @@ def policiesPIPA():
             for p in data['projectsgitlab']:
                 pID = p['value']
                 pName = p['label']
-                pGL = {pName: {'id': pID, 'name': pName}}
+                pGL = {pName: {"id": pID, "name": pName}}
                 projectsGitLab.update(pGL)
                 
             groupIPA = data['groupipa']['name']

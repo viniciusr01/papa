@@ -7,7 +7,6 @@
 
 
 .list{
-    background-color: #e43838;
     border-bottom-left-radius: 40px;
     padding-right: 15px;
     padding-left: 50px;
@@ -33,7 +32,7 @@
 }
 
 .item a:hover {
-    color: black;
+    color: rgb(241, 66, 66);
     padding: 0px 5px;
     text-decoration: none;
     
