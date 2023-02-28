@@ -14,13 +14,6 @@ function CriarPolítica(){
     const [selectedGroupipa, setSelectedGroupipa] = useState([]);
     const [policy, setPolicy] = useState([]);
 
-    const groups = [
-        {"id": 9999, "name": "A01"}, 
-        {"id": 207423, "name": "A02"}, 
-        {"id": 376443, "name": "C01"}, 
-        {"id": 55674, "name": "D01"}
-       ]
-
     useEffect(() => {
         const projectsgitlabArray = [];
         fetch('http://localhost:5000/gitlab/project',{
@@ -40,7 +33,6 @@ function CriarPolítica(){
         },[]);
 
     useEffect(() => {
-        console.log("tá entrando aqui");
             const groupsIPAArray = [];
         fetch('http://localhost:5000/ipa/getGroups',{
             method: 'GET',

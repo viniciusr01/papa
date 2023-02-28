@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useState , useEffect} from 'react'
 import { useNavigate } from 'react-router-dom'
 
 
@@ -21,6 +21,24 @@ function FormularioCadastro(){
 
     
     const [user, SetUser] = useState()
+    const [groupsipa, setGroupsipa] = useState([]);
+    const [selectedGroupipa, setSelectedGroupipa] = useState([]);
+
+    useEffect(() => {
+        const groupsIPAArray = [];
+    fetch('http://localhost:5000/ipa/getGroups',{
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+        .then((resp) => resp.json())
+        .then((data) => {console.log(data)
+        Object.keys(data).map((key) => groupsIPAArray.push({id: Number(data[key].id), name: data[key].name}));
+        }).then(() => { 
+        setGroupsipa(groupsIPAArray)})
+        .catch((error)=> console.log(error))
+},[]);
 
     function sendRequestForAddUser(user){
         
@@ -101,12 +119,13 @@ function FormularioCadastro(){
                         handleOnChange={handleChange}
                 />
 
+                {!!groupsipa.length && (
                 <Select name="grupo_id" 
                         text="Selecione o grupo"
-                        options={groups}
+                        options={groupsipa}
                         handleOnChange={handleGroup}
                         
-                />
+                />)}
 
                 <SubmitButton text="Enviar solicitação" />
             </form>
