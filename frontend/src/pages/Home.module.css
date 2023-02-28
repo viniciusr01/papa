@@ -17,6 +17,8 @@
 
 .btn{
     background-color: #222;
+    font-size: 12px;
+    border-radius: 30px;
     color: #fff;
     padding: 0.7em 1.2em;
     text-decoration: none;
@@ -25,10 +27,42 @@
     cursor: pointer;
     border: none;
     width: 38vw;
-    height: 34vh;
+    height: 28vh;
 }
 
 .btn:hover {
     color: #ED0000;
    
+}
+
+.h1 {
+    background-color: black;
+    font-weight: bold; 
+    display: inline-block;
+    color: white;
+    margin-top: 80px;
+    margin-left: 80px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+
+.p {
+    font-size: 20px;
+    padding-top: 5em;
+    padding-left: 7em;
+    padding-right: 7em;
+    text-align: justify;
+}
+
+.logoMPMG {
+    padding-left: 8em;
+    margin-top: 60px;
+    height: 60px;
+}
+
+.logoUFMG {
+    padding-left: 2em;
+    margin-top: 60px;
+    height: 60px;
 }

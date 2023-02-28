@@ -1,13 +1,12 @@
 import {Link} from 'react-router-dom';
 import styles from './Navbar.module.css'
 
-
 function Navbar(){
-    
+
     return (
-    
+ 
     <div>
-        <nav className={styles.navbar}>     
+     <nav className={styles.navbar}>     
             <h1 style={{color: 'white', padding: '0.5em'}}>PIPA</h1>
         
         <ul className={styles.list}>
