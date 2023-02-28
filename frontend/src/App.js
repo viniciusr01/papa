@@ -9,9 +9,7 @@ import Footer from './layout/Footer'
 import GrupoPoliticas from './pages/GrupoPoliticas'
 import GrupoPolitica  from './pages/GrupoPolitica'
 import PermissoesGrupo from './pages/PermissoesGrupo';
-import CriarPolítica from './pages/CriarPolitica';
-import InfoUsuario from './pages/InfoUsuario';
-import PoliticaEspecifica from './pages/PoliticaEspecifica';
+import CriarGrupo from './pages/CriarGrupo';
 
 
 function App() {
@@ -28,10 +26,8 @@ function App() {
           <Route path="usuario/:username" element={<Usuario/>}></Route>
           <Route path="politicas" element={<GrupoPoliticas/>}></Route>
           <Route path="politica/:policyID" element={<GrupoPolitica/>}></Route>
-          <Route path="criarpolitica" element={<CriarPolítica/>}></Route>
+          <Route path="criargrupo" element={<CriarGrupo/>}></Route>
           <Route path="permissoesgrupo" element={<PermissoesGrupo/>}></Route>
-          <Route path="infousuario" element={<InfoUsuario/>}></Route>
-          <Route path="politicaespecifica" element={<PoliticaEspecifica/>}></Route>
 
         </Routes>
 
