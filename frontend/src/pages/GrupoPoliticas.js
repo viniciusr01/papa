@@ -1,6 +1,7 @@
 import styles from './GrupoPoliticas.module.css'
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -15,6 +16,8 @@ import AddIcon from '@mui/icons-material/Add';
 import Button from '@mui/material/Button';
 
 function GrupoPoliticas(){
+
+    const navigate = useNavigate();
 
     const [grupoDePoliticas, setgrupoDePoliticas] = useState([])
 
@@ -42,7 +45,7 @@ function GrupoPoliticas(){
             
             
 
-            <Button sx={{position: 'absolute', right: '11%'}} component={Link} to={'/criarpolitica'} variant="contained" startIcon={<AddIcon />}>
+            <Button sx={{position: 'absolute', right: '11%'}} component={Link} to={'/criargrupo'} variant="contained" startIcon={<AddIcon />}>
                 Criar novo grupo de politica
             </Button>
             <br></br>

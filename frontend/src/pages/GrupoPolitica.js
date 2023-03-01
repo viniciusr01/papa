@@ -4,6 +4,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -25,6 +26,9 @@ import DialogContentText from '@mui/material/DialogContentText';
 
 
 function GrupoPolitica(){
+
+    const navigate = useNavigate();
+
 
     const { policyID } = useParams()
 
@@ -148,7 +152,7 @@ function GrupoPolitica(){
                 </Button>
                 &ensp;
 
-                <Button onClick={() => (console.log('button member'))} variant="outlined" startIcon={<GroupAddIcon />}>
+                <Button onClick={() => navigate("/permissoesgrupo")} variant="outlined" startIcon={<GroupAddIcon />}>
                     Adicionar Membros
                 </Button>
                 &ensp;
