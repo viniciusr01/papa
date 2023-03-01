@@ -3,21 +3,13 @@ import { useNavigate } from 'react-router-dom'
 
 
 import Input from '../components/form/Input';
-import Select from '../components/form/Select';
 import SubmitButton from '../components/form/SubmitButton';
 import styles from './FormCadastro.module.css'
 
 function FormularioCadastro(){
 
     
-    const groups = [
-              {"id": 1, "name": "A01"}, 
-              {"id": 2, "name": "A02"}, 
-              {"id": 3, "name": "C01"}, 
-              {"id": 4, "name": "D01"}
-             ]
-    
-    const history = useNavigate()
+     const history = useNavigate()
 
     
     const [user, SetUser] = useState()
@@ -99,13 +91,6 @@ function FormularioCadastro(){
                         name="username"
                         placeholder="Insira um username"
                         handleOnChange={handleChange}
-                />
-
-                <Select name="grupo_id" 
-                        text="Selecione o grupo"
-                        options={groups}
-                        handleOnChange={handleGroup}
-                        
                 />
 
                 <SubmitButton text="Enviar solicitação" />

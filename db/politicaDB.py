@@ -64,7 +64,7 @@ def getPolicy(policyID):
     try:
         cur, conn = startConnectionDB()
 
-        cur.execute("SELECT policyid, name, projectsgitlab, groupipa FROM politicas WHERE policyID = %s", (policyID,))
+        cur.execute("SELECT policyid, name, projectsgitlab, groupipa, members FROM politicas WHERE policyID = %s", (policyID,))
         
         result = cur.fetchone()
         
@@ -146,6 +146,54 @@ def getAllPolicies():
     
     except(Exception, psycopg2.Error) as error:
         return "Failed to get policy from database:" + str(error)
+    
+    finally:
+        if conn:
+            closeConnectionDB(cur, conn)
+
+
+def updatePolicyMembers(policyID, members):
+    try:
+        cur, conn = startConnectionDB()
+
+        cur.execute('''
+                        UPDATE politicas
+                        SET 
+                            members=%s
+                        WHERE 
+                            policyID=%s
+                    '''
+                    ,(members, policyID)
+                    )
+
+        conn.commit()
+
+        closeConnectionDB(cur, conn)
+
+        return "Sucesso em inserir membros na política!"
+        
+    
+    except(Exception, psycopg2.Error) as error:
+        return "Failed to insert members policy data into database: " +  str(error)
+    
+    finally:
+        if conn:
+            closeConnectionDB(cur, conn)
+
+
+def getMemberPolicy(policyID):
+    try:
+        cur, conn = startConnectionDB()
+
+        cur.execute("SELECT members FROM politicas WHERE policyID = %s", (policyID,))
+        
+        result = cur.fetchone()
+        
+        closeConnectionDB(cur, conn)
+        return result
+    
+    except(Exception, psycopg2.Error) as error:
+        return "Failed to get the members of a policy from the database:" + str(error)
     
     finally:
         if conn:
