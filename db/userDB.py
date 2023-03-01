@@ -38,9 +38,9 @@ def insertUser(username, firstName, lastName, fullName , email):
     try:
         cur, conn = startConnectionDB()
 
-        cur.execute('INSERT INTO usuarios (username, firstName, lastName, fullName, email, iscreatedipa, iscreatedgitlab, iscreatedjenkins)'
-                    'VALUES (%s, %s, %s, %s, %s, %s, %s, %s)',
-                    (username, firstName, lastName, fullName, email, False, False, False)
+        cur.execute('INSERT INTO usuarios (username, firstName, lastName, fullName, email, iscreatedipa, iscreatedgitlab)'
+                    'VALUES (%s, %s, %s, %s, %s, %s, %s)',
+                    (username, firstName, lastName, fullName, email, False, False)
                     )
         
         conn.commit()
@@ -143,12 +143,11 @@ def updateServicesFlags(username):
                         UPDATE usuarios
                         SET 
                             iscreatedipa= %s,
-                            iscreatedgitlab=%s,
-                            iscreatedjenkins=%s
+                            iscreatedgitlab=%s
                         WHERE 
                             username=%s
                     '''
-                    ,(True, True, False, username)
+                    ,(True, True, username)
                     )
 
         conn.commit()
@@ -190,41 +189,35 @@ def getAllUsers():
 def updatePolicyID(username, policyID):
     try:
         cur, conn = startConnectionDB()
-
-        print("UPDATE POLICY")
-      
         cur.execute("SELECT policyid from usuarios where username=%s", (username,))
         result = cur.fetchone()
 
-        print("The result is: ", result[0])
         policyIds = []
 
-        
-        for policies in result[0]:
-            policyIds.append(policies)
+        policyIds.append(int(policyID))
 
-        policyIds.append(policyID)
-        
-        
+        if(result['policyid'] != None):   
+            for policies in result['policyid']:
+                policyIds.append(int(policies))   
 
-        print("The polyci ID is:", policyIds)
-        
-        '''
+        print(policyIds)
+        print(username)
+ 
+       
         cur.execute(
-                    
+                        '''
                         UPDATE usuarios
                         SET 
-                            policyid=%s
+                            policyid= %s
                         WHERE 
                             username=%s
-                 
+                        '''
                     ,(policyIds, username)
                     )
 
         conn.commit()
-        '''
         closeConnectionDB(cur, conn)
-
+        
         return "Sucesso ao atribuir uma política para o usuário"
         
     

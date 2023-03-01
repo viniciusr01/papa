@@ -143,6 +143,8 @@ def userPolicy():
         for user in userNames:
             userDB.updatePolicyID(user, policyID)
 
+        politicaDB.updatePolicyMembers(policyID, userNames)
+
         return "Sucesso ao atribuir uma política para o(s) usuário(s)" 
 
     except Exception as erro:
@@ -243,6 +245,33 @@ def policiesPIPA():
 
         except Exception as error:
             return "Failed to delete the policy in database: " + str(error)
+
+
+
+@app.route("/policy/members", methods = ['GET', 'POST'])
+def policyMembers():
+
+
+    if request.method == 'GET': 
+        policyID = request.args.get("policyid")
+        
+        try:
+            result = politicaDB.getMemberPolicy(policyID)
+            return result
+        
+        except Exception as error:
+            return "Failed to get the members of a policy from the database: " + str(error)
+       
+
+    if request.method == 'POST':
+
+        try:
+            data = request.get_json()
+            
+            return data
+        
+        except Exception as error:
+             return "Failed to insert members policy data into database:" + str(error)
 
 
 app.run(debug=True)

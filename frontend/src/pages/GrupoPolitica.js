@@ -3,8 +3,6 @@ import styles from './GrupoPolitica.module.css'
 import React from 'react';
 import { useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
 
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -23,6 +21,35 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
+
+
+
+/* Transfer list*/
+import Grid from '@mui/material/Grid';
+import List from '@mui/material/List';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import Checkbox from '@mui/material/Checkbox';
+import Divider from '@mui/material/Divider';
+
+
+function not(a, b) {
+    return a.filter((value) => b.indexOf(value) === -1);
+}
+  
+function intersection(a, b) {
+    return a.filter((value) => b.indexOf(value) !== -1);
+}
+  
+function union(a, b) {
+    return [...a, ...not(b, a)];
+}
+/* Finish Transfer List */
 
 
 function GrupoPolitica(){
@@ -36,8 +63,31 @@ function GrupoPolitica(){
 
     const [glProjects, setGLProjects] = useState([])
 
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
 
+    const [openAddMember, setOpenAddMember] = useState(false);
+
+
+
+    function addMembros(policyID, usernames){
+        fetch(`http://localhost:5000/user/policy`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "policyid": policyID,
+                "usernames": usernames
+            })
+        })
+            .then((resp) => resp.json())
+            .then((data) => {
+                console.log(data)
+            })
+            .catch((error)=> console.log(error))
+
+            window.location.replace(`http://localhost:3000/politicas`);
+    }
     
     function deletarGrupoPolitica(policyID){
 
@@ -61,11 +111,13 @@ function GrupoPolitica(){
     }
 
 
- 
-
     const handleClose = () => {
       setOpen(false);
     };
+
+    const handleCloseAddMember = () => {
+        setOpenAddMember(false);
+      };
 
 
     useEffect(() => {
@@ -87,6 +139,163 @@ function GrupoPolitica(){
     }, [])
 
 
+
+    /* Transfer List */
+
+    const [checked, setChecked] = useState([]);
+    const [left, setLeft] = useState([]);
+    const [right, setRight] = useState([]);
+
+
+    /* Get Left Side Tranfer List */
+    useEffect(() => {
+        
+        fetch('http://localhost:5000/user',{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((resp) => resp.json())
+            .then((data) => {
+                const usernames = []
+
+                data.forEach(element => {
+                    usernames.push(element.username)
+                });
+                console.log(usernames)
+                setLeft(usernames)
+            })
+            .catch((error)=> console.log(error))
+
+    }, [])
+
+    /* Get Right Side Tranfer List */
+    useEffect(() => {
+        
+        fetch(`http://localhost:5000/policy/members?policyid=${policyID}`,{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((resp) => resp.json())
+            .then((data) => {
+                console.log(data)
+                data.members === null ? setRight([]) : setRight(data.members)
+            })
+            .catch((error)=> console.log(error))
+
+    }, [])
+
+ 
+    const leftChecked = intersection(checked, left);
+    const rightChecked = intersection(checked, right);
+  
+    const handleToggle = (value) => () => {
+      const currentIndex = checked.indexOf(value);
+      const newChecked = [...checked];
+  
+      if (currentIndex === -1) {
+        newChecked.push(value);
+      } else {
+        newChecked.splice(currentIndex, 1);
+      }
+  
+      setChecked(newChecked);
+    };
+  
+    const numberOfChecked = (items) => intersection(checked, items).length;
+  
+    const handleToggleAll = (items) => () => {
+      if (numberOfChecked(items) === items.length) {
+        setChecked(not(checked, items));
+      } else {
+        setChecked(union(checked, items));
+      }
+    };
+  
+    const handleCheckedRight = () => {
+      setRight(right.concat(leftChecked));
+      setLeft(not(left, leftChecked));
+      setChecked(not(checked, leftChecked));
+    };
+  
+    const handleCheckedLeft = () => {
+      setLeft(left.concat(rightChecked));
+      setRight(not(right, rightChecked));
+      setChecked(not(checked, rightChecked));
+    };
+  
+
+    
+    const customList = (title, items) => (
+        <Card>
+            <CardHeader
+            sx={{ px: 2, py: 1 }}
+            avatar={
+                <Checkbox
+                onClick={handleToggleAll(items)}
+                checked={numberOfChecked(items) === items.length && items.length !== 0}
+                indeterminate={
+                    numberOfChecked(items) !== items.length && numberOfChecked(items) !== 0
+                } 
+                disabled={items.length === 0}
+                inputProps={{
+                '   aria-label': 'all items selected',
+                }}
+                />
+            }
+            title={title}
+            subheader={`${numberOfChecked(items)}/${items.length} selected`}
+            />
+
+            <Divider />
+            <List
+                sx={{
+                width: 200,
+                height: 230,
+                bgcolor: 'background.paper',
+                overflow: 'auto',
+                }}
+                dense
+                component="div"
+                role="list"
+            >
+            
+                {items.map((value) => {
+                const labelId = `transfer-list-all-item-${value}-label`;
+  
+                return (
+                    <ListItem
+                        key={value}
+                        role="listitem"
+                        button
+                        onClick={handleToggle(value)}
+                    >
+                    < ListItemIcon>
+                    <Checkbox
+                        checked={checked.indexOf(value) !== -1}
+                        tabIndex={-1}
+                        disableRipple
+                        inputProps={{
+                            'aria-labelledby': labelId,
+                        }}
+                    />
+                    </ListItemIcon>
+                    <ListItemText id={labelId} primary={value} />
+                    </ListItem>
+                );
+            })}
+            </List>
+        </Card>
+
+    );
+  
+
+
+    /* Finish Transfer List */
+
     return (
     
         <div className={styles.gpPolitica_container}>
@@ -107,6 +316,61 @@ function GrupoPolitica(){
                 <DialogActions>
                     <Button sx= {{ backgroundColor: 'white', color: 'black', '&:hover': {backgroundColor: 'grey', color: 'white'} }} onClick={handleClose} variant="contained" >Cancelar</Button>
                     <Button sx= {{ backgroundColor: 'white', color: 'red', '&:hover': {backgroundColor: 'red', color: 'white'} }} onClick={() => deletarGrupoPolitica(gpPolitica.policyid)} variant="contained"> Deletar</Button>
+                </DialogActions>
+            </Dialog>
+        </div>
+
+        
+        <div>
+            {/* Dialog to Add Members*/}
+            <Dialog
+                open={openAddMember}
+                onClose={handleCloseAddMember}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle sx={{color: 'white', backgroundColor: 'black'}} id="alert-dialog-title">
+                    {"Adiconar Membros"}
+                </DialogTitle>
+                <DialogContent>
+
+                    <br></br>
+                    <Grid container spacing={2} justifyContent="center" alignItems="center">
+                        <Grid item>{customList('Choices', left)}</Grid>
+                        <Grid item>
+                            <Grid container direction="column" alignItems="center">
+                                <Button
+                                    sx={{ my: 0.5 }}
+                                    variant="outlined"
+                                    size="small"
+                                    onClick={handleCheckedRight}
+                                    disabled={leftChecked.length === 0}
+                                    aria-label="move selected right"
+                                >
+                                    &gt;
+                                </Button>
+                                <Button
+                                    sx={{ my: 0.5 }}
+                                    variant="outlined"
+                                    size="small"
+                                    onClick={handleCheckedLeft}
+                                    disabled={rightChecked.length === 0}
+                                    aria-label="move selected left"
+                                >
+                                    &lt;
+                                </Button>
+                            </Grid>
+                        </Grid>
+                        <Grid item>{customList('Chosen', right)}</Grid>
+                    </Grid>
+                </DialogContent>
+
+
+
+
+                <DialogActions>
+                    <Button sx= {{ backgroundColor: 'white', color: 'black', '&:hover': {backgroundColor: 'grey', color: 'white'} }} onClick={handleCloseAddMember} variant="contained" >Cancelar</Button>
+                    <Button sx= {{ backgroundColor: 'green', color: 'white', '&:hover': {backgroundColor: 'white', color: 'green'} }} onClick={() => addMembros(policyID, right)} variant="contained" >Add</Button>
                 </DialogActions>
             </Dialog>
         </div>
@@ -152,7 +416,7 @@ function GrupoPolitica(){
                 </Button>
                 &ensp;
 
-                <Button onClick={() => navigate("/permissoesgrupo")} variant="outlined" startIcon={<GroupAddIcon />}>
+                <Button onClick={() => (setOpenAddMember(true))} variant="outlined" startIcon={<GroupAddIcon />}>
                     Adicionar Membros
                 </Button>
                 &ensp;
