@@ -157,9 +157,6 @@ function Usuario(){
 
                 <p> Ações </p>
                 <br></br>
-                <Button sx={{ color:'green', borderColor: 'green' }} component={Link} to={`/usuario/${usuario[0]}`} variant="outlined" startIcon={<EditIcon />}>
-                    Alterar
-                </Button>
                 &ensp;
                 <Button sx={{ color:'red', borderColor: 'red' }} onClick={() => (setOpen(true))} variant="outlined" startIcon={<DeleteIcon />}>
                     Deletar
@@ -189,6 +186,10 @@ function Usuario(){
 
             </TableContainer>
         </div>
+        //Botão para alterar dados do usuário ainda  sem funcionamento. Inserir logo após a linha 159 quando funcional. 
+        /* <Button sx={{ color:'green', borderColor: 'green' }} component={Link} to={`/usuario/${usuario[0]}`} variant="outlined" startIcon={<EditIcon />}>
+                    Alterar
+                </Button> */
      
     )
 }
