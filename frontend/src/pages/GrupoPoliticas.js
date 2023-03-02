@@ -66,7 +66,6 @@ function GrupoPoliticas(){
                             id="panel1a-header"
 
                             sx = {{
-                                    backgroundColor: '#d3cfcf', 
                                     borderBottomLeftRadius: '0.5em', 
                                     borderBottomRightRadius:'0.5em',
                                   }}
