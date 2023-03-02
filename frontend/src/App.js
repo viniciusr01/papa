@@ -8,7 +8,6 @@ import Navbar from './layout/Navbar';
 import Footer from './layout/Footer'
 import GrupoPoliticas from './pages/GrupoPoliticas'
 import GrupoPolitica  from './pages/GrupoPolitica'
-import PermissoesGrupo from './pages/PermissoesGrupo';
 import CriarGrupo from './pages/CriarGrupo';
 
 
@@ -27,7 +26,6 @@ function App() {
           <Route path="politicas" element={<GrupoPoliticas/>}></Route>
           <Route path="politica/:policyID" element={<GrupoPolitica/>}></Route>
           <Route path="criargrupo" element={<CriarGrupo/>}></Route>
-          <Route path="permissoesgrupo" element={<PermissoesGrupo/>}></Route>
 
         </Routes>
 

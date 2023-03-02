@@ -122,12 +122,12 @@ function CriarPolítica(){
 
                 <h4>Grupo do FreeIPA ao qual os usuários terão acesso.</h4>
                 
-                {!!groupsipa.length && (<Select name="grupo_id" 
+                <Select name="grupo_id" 
                         text="Selecione o grupo"
                         options={groupsipa}
                         handleOnChange={handleGroup}
                         
-                />)}
+                />
                 
 
             <SubmitButton text="Criar grupo" />
