@@ -34,7 +34,7 @@ function Home(){
                         <Grid container spacing={2} columns={6}>
                             <Grid xs={3}>
                                 <div className={styles.Container}>
-                                    <button className={styles.btn} onClick={() => history("/criarpolitica")}><h1>Criar novo Grupo do PIPA</h1></button>
+                                    <button className={styles.btn} onClick={() => history("/criargrupo")}><h1>Criar novo Grupo do PIPA</h1></button>
                                 </div>
 
                                 <div className={styles.Container}>
@@ -45,7 +45,7 @@ function Home(){
 
                             <Grid xs={3}>
                                 <div className={styles.Container}>
-                                    <button className={styles.btn} onClick={() => history("/politicaespecifica")}><h1>Adicionar usuários a um grupo</h1></button>
+                                    <button className={styles.btn} onClick={() => history("/politicas")}><h1>Adicionar usuários a um grupo</h1></button>
                                 </div>
 
                                 <div className={styles.Container}>

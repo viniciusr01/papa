@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import Input from '../components/form/Input';
 import SubmitButton from '../components/form/SubmitButton';
 import styles from './FormCadastro.module.css'
+import Select from '../components/form/Select';
 
 function FormularioCadastro(){
 
