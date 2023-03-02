@@ -1,4 +1,4 @@
-import styles from './InfoUsuario.module.css'
+import styles from './PermissoesGrupo.module.css'
 import React, { useState, useEffect } from 'react';
 import MultipleSelect from 'react-select'
 import SubmitButton from '../components/form/SubmitButton';
