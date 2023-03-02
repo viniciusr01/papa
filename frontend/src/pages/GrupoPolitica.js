@@ -55,7 +55,7 @@ function union(a, b) {
 
 function GrupoPolitica(){
 
-    const navigate = useNavigate();
+    //const navigate = useNavigate();
 
 
     const { policyID } = useParams()
@@ -140,36 +140,13 @@ function GrupoPolitica(){
     }, [])
 
 
-
     /* Transfer List */
-
     const [checked, setChecked] = useState([]);
     const [left, setLeft] = useState([]);
     const [right, setRight] = useState([]);
 
+    const nomesEsquerda = not(left, right)
 
-    /* Get Left Side Tranfer List */
-    useEffect(() => {
-        
-        fetch('http://localhost:5000/user',{
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-            .then((resp) => resp.json())
-            .then((data) => {
-                const usernames = []
-
-                data.forEach(element => {
-                    usernames.push(element.username)
-                });
-                console.log(usernames)
-                setLeft(usernames)
-            })
-            .catch((error)=> console.log(error))
-
-    }, [])
 
     /* Get Right Side Tranfer List */
     useEffect(() => {
@@ -188,7 +165,33 @@ function GrupoPolitica(){
             .catch((error)=> console.log(error))
 
     }, [])
+    
 
+    /* Get Left Side Tranfer List */
+    useEffect(() => {
+        
+        fetch('http://localhost:5000/user',{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((resp) => resp.json())
+            .then((data) => {
+                const usernames = []
+
+                data.forEach(element => {
+                    usernames.push(element.username)
+                });
+                console.log(usernames)
+
+                setLeft(usernames)
+            })
+            .catch((error)=> console.log(error))
+
+    }, [])
+
+   
  
     const leftChecked = intersection(checked, left);
     const rightChecked = intersection(checked, right);
@@ -337,7 +340,7 @@ function GrupoPolitica(){
 
                     <br></br>
                     <Grid container spacing={2} justifyContent="center" alignItems="center">
-                        <Grid item>{customList('Choices', left)}</Grid>
+                        <Grid item>{customList('Choices', nomesEsquerda)}</Grid>
                         <Grid item>
                             <Grid container direction="column" alignItems="center">
                                 <Button
