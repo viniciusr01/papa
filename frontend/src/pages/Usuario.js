@@ -157,6 +157,14 @@ function Usuario(){
 
                 <p> Ações </p>
                 <br></br>
+                <Button sx={{ color:'green', borderColor: 'green' }} component={Link} to={`/usuario/${usuario[0]}`} variant="outlined" startIcon={<EditIcon />}>
+                    Alterar
+                </Button>
+                &ensp;
+                <Button sx={{ color:'red', borderColor: 'red' }} onClick={() => (setOpen(true))} variant="outlined" startIcon={<DeleteIcon />}>
+                    Deletar
+                </Button>
+                &ensp;
 
                 {usuario.iscreatedgitlab  === true 
                 ? 
