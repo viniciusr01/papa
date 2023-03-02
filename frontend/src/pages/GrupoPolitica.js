@@ -15,6 +15,7 @@ import Paper from '@mui/material/Paper';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import WifiProtectedSetupIcon from '@mui/icons-material/WifiProtectedSetup';
 import Button from '@mui/material/Button';
 
 
@@ -251,7 +252,7 @@ function GrupoPolitica(){
                 />
             }
             title={title}
-            subheader={`${numberOfChecked(items)}/${items.length} selected`}
+            subheader={`${numberOfChecked(items)}/${items.length} selecionados`}
             />
 
             <Divider />
@@ -314,12 +315,12 @@ function GrupoPolitica(){
             >
                 <DialogContent>
                     <DialogContentText sx = {{color: 'black', fontWeight:'500'}}id="alert-dialog-description">
-                      Você tem certeza que dejesa deletar o grupo de política <b>{gpPolitica.name}</b>?
+                      Você tem certeza que deseja excluir o grupo de política <b>{gpPolitica.name}</b>?
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button sx= {{ backgroundColor: 'white', color: 'black', '&:hover': {backgroundColor: 'grey', color: 'white'} }} onClick={handleClose} variant="contained" >Cancelar</Button>
-                    <Button sx= {{ backgroundColor: 'white', color: 'red', '&:hover': {backgroundColor: 'red', color: 'white'} }} onClick={() => deletarGrupoPolitica(gpPolitica.policyid)} variant="contained"> Deletar</Button>
+                    <Button sx= {{ backgroundColor: 'white', color: 'red', '&:hover': {backgroundColor: 'red', color: 'white'} }} onClick={() => deletarGrupoPolitica(gpPolitica.policyid)} variant="contained"> Excluir grupo</Button>
                 </DialogActions>
             </Dialog>
         </div>
@@ -334,13 +335,13 @@ function GrupoPolitica(){
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle sx={{color: 'white', backgroundColor: 'black'}} id="alert-dialog-title">
-                    {"Adiconar Membros"}
+                    {"Associar usuários ao grupo de política"}
                 </DialogTitle>
                 <DialogContent>
 
                     <br></br>
                     <Grid container spacing={2} justifyContent="center" alignItems="center">
-                        <Grid item>{customList('Choices', nomesEsquerda)}</Grid>
+                        <Grid item>{customList('Não associados', nomesEsquerda)}</Grid>
                         <Grid item>
                             <Grid container direction="column" alignItems="center">
                                 <Button
@@ -365,7 +366,7 @@ function GrupoPolitica(){
                                 </Button>
                             </Grid>
                         </Grid>
-                        <Grid item>{customList('Chosen', right)}</Grid>
+                        <Grid item>{customList('Associados', right)}</Grid>
                     </Grid>
                 </DialogContent>
 
@@ -374,7 +375,7 @@ function GrupoPolitica(){
 
                 <DialogActions>
                     <Button sx= {{ backgroundColor: 'white', color: 'black', '&:hover': {backgroundColor: 'grey', color: 'white'} }} onClick={handleCloseAddMember} variant="contained" >Cancelar</Button>
-                    <Button sx= {{ backgroundColor: 'green', color: 'white', '&:hover': {backgroundColor: 'white', color: 'green'} }} onClick={() => addMembros(policyID, right)} variant="contained" >Add</Button>
+                    <Button sx= {{ backgroundColor: 'green', color: 'white', '&:hover': {backgroundColor: 'white', color: 'green'} }} onClick={() => addMembros(policyID, right)} variant="contained" >Associar</Button>
                 </DialogActions>
             </Dialog>
         </div>
@@ -412,24 +413,38 @@ function GrupoPolitica(){
 
                 <div className={styles.gpPolitica_buttonsAction}>
 
+                
+
+                <p> Membros </p>
+                <br></br>                                 
+
                 <p> Ações </p>
                 <br></br>
-               
-                <Button sx={{ color:'red', borderColor: 'red' }} onClick={() => (setOpen(true))} variant="outlined" startIcon={<DeleteIcon />}>
-                    Deletar
-                </Button>
-                &ensp;
 
                 <Button onClick={() => (setOpenAddMember(true))} variant="outlined" startIcon={<GroupAddIcon />}>
-                    Adicionar Membros
+                    Associar usuários
+                </Button>
+                &ensp;
+
+                <Button onClick={() => (setOpenAddMember(true))} variant="outlined" startIcon={<WifiProtectedSetupIcon />} disabled>
+                    Associar nos serviços
                 </Button>
                 &ensp;
 
                
-                <br></br>
-                <br></br>
-                </div>
+                <Button sx={{ color:'red', borderColor: 'red' }} onClick={() => (setOpen(true))} variant="outlined" startIcon={<DeleteIcon />}>
+                    Excluir Grupo
+                </Button>
+                &ensp;
 
+                
+                
+                <br></br>
+                <br></br>
+
+                </div>
+                
+                
 
             </TableContainer>
             

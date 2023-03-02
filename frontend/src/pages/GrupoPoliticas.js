@@ -43,7 +43,6 @@ function GrupoPoliticas(){
        
         <div className={styles.grupoPoliticas_container}>
             
-            
 
             <Button sx={{position: 'absolute', right: '11%'}} component={Link} to={'/criargrupo'} variant="contained" startIcon={<AddIcon />}>
                 Criar novo grupo de politica
@@ -89,7 +88,7 @@ function GrupoPoliticas(){
                                     <br></br>
 
                             <Button component={Link} to={`/politica/${gp.policyid}`} variant="outlined" startIcon={<ReadMoreIcon />}>
-                                Detalhes
+                                Gerir Grupo
                             </Button>
                         </AccordionDetails>
  

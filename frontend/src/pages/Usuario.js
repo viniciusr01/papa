@@ -112,12 +112,12 @@ function Usuario(){
             >
                 <DialogContent>
                     <DialogContentText sx = {{color: 'black', fontWeight:'500'}}id="alert-dialog-description">
-                      Você tem certeza que dejesa deletar o usuário <b>{usuario.username}</b>?
+                      Você tem certeza que deseja excluir o usuário <b>{usuario.username}</b>?
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button sx= {{ backgroundColor: 'white', color: 'black', '&:hover': {backgroundColor: 'grey', color: 'white'} }} onClick={handleClose} variant="contained" >Cancelar</Button>
-                    <Button sx= {{ backgroundColor: 'white', color: 'red', '&:hover': {backgroundColor: 'red', color: 'white'} }} onClick={() => deletarUsuario(usuario.username)} variant="contained"> Deletar</Button>
+                    <Button sx= {{ backgroundColor: 'white', color: 'red', '&:hover': {backgroundColor: 'red', color: 'white'} }} onClick={() => deletarUsuario(usuario.username)} variant="contained"> Excluir</Button>
                 </DialogActions>
             </Dialog>
         </div>
@@ -130,8 +130,8 @@ function Usuario(){
                 <TableRow>
                     <TableCell sx={{ fontWeight: 'bold', fontSize: 16 }} >Username&nbsp;</TableCell>
                     <TableCell sx={{ fontWeight: 'bold', fontSize: 16 }} align="center">Email</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold', fontSize: 16 }} align="center">FreeIPA</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold', fontSize: 16 }} align="center">GitLab</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold', fontSize: 16 }} align="center">Já cadastrado no FreeIPA?</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold', fontSize: 16 }} align="center">Já cadastrado no GitLab?</TableCell>
                 </TableRow>
                 </TableHead>
                 <TableBody>
@@ -157,14 +157,6 @@ function Usuario(){
 
                 <p> Ações </p>
                 <br></br>
-                <Button sx={{ color:'green', borderColor: 'green' }} component={Link} to={`/usuario/${usuario[0]}`} variant="outlined" startIcon={<EditIcon />}>
-                    Alterar
-                </Button>
-                &ensp;
-                <Button sx={{ color:'red', borderColor: 'red' }} onClick={() => (setOpen(true))} variant="outlined" startIcon={<DeleteIcon />}>
-                    Deletar
-                </Button>
-                &ensp;
 
                 {usuario.iscreatedgitlab  === true 
                 ? 
@@ -176,12 +168,23 @@ function Usuario(){
                 : 
 
                 <Button  onClick={() => (criarUsuarioIpaGitlab(usuario.username))} variant="outlined" startIcon={<GroupAddIcon />}>
-                    Criar usuário no IPA e no GitLab
+                    Cadastrar usuário no FreeIPA e no GitLab
                 </Button>
                 
                 }
                 
                 &ensp;
+
+                <Button sx={{ color:'green', borderColor: 'green' }} component={Link} to={`/usuario/${usuario[0]}`} variant="outlined" startIcon={<EditIcon />}>
+                    Editar
+                </Button>
+                &ensp;
+                <Button sx={{ color:'red', borderColor: 'red' }} onClick={() => (setOpen(true))} variant="outlined" startIcon={<DeleteIcon />}>
+                    Excluir
+                </Button>
+                &ensp;
+
+                
                 <br></br>
                 <br></br>
                 </div>
