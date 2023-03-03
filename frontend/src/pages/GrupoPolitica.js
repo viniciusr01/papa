@@ -16,6 +16,7 @@ import Paper from '@mui/material/Paper';
 import DeleteIcon from '@mui/icons-material/Delete';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import WifiProtectedSetupIcon from '@mui/icons-material/WifiProtectedSetup';
+import GitHubIcon from '@mui/icons-material/GitHub';
 import Button from '@mui/material/Button';
 
 
@@ -56,7 +57,7 @@ function union(a, b) {
 
 function GrupoPolitica(){
 
-    //const navigate = useNavigate();
+
 
 
     const { policyID } = useParams()
@@ -65,11 +66,13 @@ function GrupoPolitica(){
 
     const [glProjects, setGLProjects] = useState([])
 
+    const [gpMember, setGpMember] = useState([])
+
     const [open, setOpen] = useState(false);
 
     const [openAddMember, setOpenAddMember] = useState(false);
 
-
+    
 
     function addMembros(policyID, usernames){
         fetch(`http://localhost:5000/user/policy`,{
@@ -113,6 +116,32 @@ function GrupoPolitica(){
     }
 
 
+    function associarUsuariosGitLab(usernames, projetos){
+
+        console.log(usernames, projetos)
+
+        
+        fetch(`http://localhost:5000/gitlab/project`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "usernames": usernames,
+                "projects": projetos
+            })
+        })
+            .then((resp) => resp.json())
+            .then((data) => {
+                console.log(data)
+            })
+            .catch((error)=> console.log(error))
+
+            //window.location.replace(`http://localhost:3000/politicas`);
+        
+    }
+
+
     const handleClose = () => {
       setOpen(false);
     };
@@ -135,6 +164,7 @@ function GrupoPolitica(){
                 console.log(data)
                 setGpPolitica(data)
                 setGLProjects(data.projectsgitlab)
+                setGpMember(data.members)
             })
             .catch((error)=> console.log(error))
 
@@ -416,7 +446,33 @@ function GrupoPolitica(){
                 
 
                 <p> Membros </p>
-                <br></br>                                 
+                <br></br>
+                
+                {
+                    gpMember == null 
+
+                    ?
+
+                    <div>
+                        <span>Nenhum usuário associado ao grupo</span>
+                        <br></br>
+                        <br></br>
+                    </div>
+                    
+                    :
+                    
+                    Object.values(gpMember).map((item) => 
+                        <Table key={item}>
+                            <TableBody>
+                                <TableCell  sx={{textAlign: 'center'}}>{item}</TableCell>
+                            </TableBody>
+                        </Table>
+                    )
+
+                   
+                }
+                                
+
 
                 <p> Ações </p>
                 <br></br>
@@ -426,8 +482,14 @@ function GrupoPolitica(){
                 </Button>
                 &ensp;
 
-                <Button onClick={() => (setOpenAddMember(true))} variant="outlined" startIcon={<WifiProtectedSetupIcon />} disabled>
-                    Associar nos serviços
+
+                <Button sx={{ color:'#E24329', borderColor: '#E24329' }} onClick={() => (associarUsuariosGitLab(gpMember, glProjects))} variant="outlined" startIcon={<GitHubIcon />}>
+                    Associar usuários no GitLab
+                </Button>
+                &ensp;
+
+                <Button sx={{ color:'green', borderColor: 'green' }} onClick={() => (setOpenAddMember(true))} variant="outlined" startIcon={<WifiProtectedSetupIcon />}>
+                    Associar usuários no FreeIPA
                 </Button>
                 &ensp;
 

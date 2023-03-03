@@ -70,7 +70,7 @@ function GrupoPoliticas(){
                                     borderBottomRightRadius:'0.5em',
                                   }}
                         >
-                             <Typography sx={{ fontWeight: 'bold', fontSize: 16 }}>{gp.name}</Typography>
+                             <Typography sx={{ fontWeight: 'bold', fontSize: 16}}>{gp.name}</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
                             <Typography>
