@@ -219,73 +219,7 @@ function Usuario(){
             </Dialog>
         </div>
 
-        <div>
-       
-            <Dialog
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-            >
-                <DialogContent>
-                    <Grid item sx={{color: 'black'}}>
-                        <Typography>
-                        Atualizar o usuário <b>{usuario.username}</b>
-                        </Typography>
-                    </Grid>
-                    <Grid>
-                        <TextField
-                        fullWidth
-                        margin="dense"
-                        label="Nome de usuário atual"
-                        id="userupdate"
-                        onChange={handleChange}
-                        />
-                    </Grid>
-                    <Grid>
-                        <TextField
-                        fullWidth
-                        margin="dense"
-                        label="Primeiro nome"
-                        id="firstName"
-                        onChange={handleChange}
-                        />
-                    </Grid>
-                    <Grid>
-                        <TextField
-                        fullWidth
-                        margin="dense"
-                        label="Sobrenome"
-                        id="lastName"
-                        onChange={handleChange}
-                        />
-                    </Grid>
-                    <Grid>
-                        <TextField
-                        fullWidth
-                        margin="dense"
-                        label="Email"
-                        id="email"
-                        onChange={handleChange}
-                        />
-                    </Grid>
-                    <Grid>
-                        <TextField
-                        fullWidth
-                        margin="dense"
-                        label="Novo nome de usuário"
-                        id="username"
-                        onChange={handleChange}
-                        />
-                    </Grid>
-                </DialogContent>
-                <DialogActions>
-                    <Button sx= {{ backgroundColor: 'white', color: 'black', '&:hover': {backgroundColor: 'grey', color: 'white'} }} onClick={handleClose} variant="contained" >Cancelar</Button>
-                    <Button sx= {{ backgroundColor: 'white', color: 'red', '&:hover': {backgroundColor: 'red', color: 'white'} }} onClick={() => atualizarUsuario(userAtualizado)} variant="contained"> Alterar</Button>
-                </DialogActions>
-            </Dialog>
-        </div>
-
+        
 
             <h1> {usuario.fullname} </h1>
             <TableContainer component={Paper}>
@@ -321,14 +255,7 @@ function Usuario(){
 
                 <p> Ações </p>
                 <br></br>
-                 <Button sx={{ color:'green', borderColor: 'green' }} onClick={() => (setOpen(true))} variant="outlined" startIcon={<EditIcon />}>
-                    Alterar
-                </Button>
-                &ensp;
-                <Button sx={{ color:'red', borderColor: 'red' }} onClick={() => (setOpen(true))} variant="outlined" startIcon={<DeleteIcon />}>
-                    Deletar
-                </Button>
-                &ensp;
+
 
                 {usuario.iscreatedgitlab  === true 
                 ? 
@@ -347,7 +274,7 @@ function Usuario(){
                 
                 &ensp;
 
-                <Button sx={{ color:'green', borderColor: 'green' }} component={Link} to={`/usuario/${usuario[0]}`} variant="outlined" startIcon={<EditIcon />}>
+                <Button sx={{ color:'green', borderColor: 'green' }} onClick={() => (setOpen(true))} variant="outlined" startIcon={<EditIcon />}>
                     Editar
                 </Button>
                 &ensp;
@@ -363,9 +290,7 @@ function Usuario(){
 
 
             </TableContainer>
-        </div>
-        //Botão para alterar dados do usuário ainda  sem funcionamento. Inserir logo após a linha 159 quando funcional. 
-       
+        </div>       
      
     )
 }
