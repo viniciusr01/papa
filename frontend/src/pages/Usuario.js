@@ -18,12 +18,14 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import Button from '@mui/material/Button';
 
-
-
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
+
+import Grid from '@mui/material/Grid';
+import Typography from '@mui//material/Typography';
+import TextField from '@mui/material/TextField';
 
 
 function Usuario(){
@@ -31,6 +33,7 @@ function Usuario(){
     const { username } = useParams()
 
     const [usuario, setUsuario] = useState([])
+    const [userAtualizado, setUserAtualizado] = useState([])
 
     const [open, setOpen] = React.useState(false);
 
@@ -73,6 +76,22 @@ function Usuario(){
 
             window.location.replace(`http://localhost:3000/usuario/${username}`);
     }
+
+    function atualizarUsuario(userAtualizado){
+        fetch(`http://localhost:5000/user`,{
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userAtualizado)
+        })
+            .then((resp) => resp.json())
+            .then((data) => {
+                console.log(data)
+            })
+            .catch((error)=> console.log(error))
+            window.location.replace(`http://localhost:3000/usuario/${username}`);
+    }
    
 
     const handleClose = () => {
@@ -90,12 +109,23 @@ function Usuario(){
         })
             .then((resp) => resp.json())
             .then((data) => {
-                console.log(data)
+                //console.log(data)
                 setUsuario(data)
             })
             .catch((error)=> console.log(error))
 
     }, [])
+
+
+    function handleChange(e){
+        setUserAtualizado({ ...userAtualizado, [e.target.name]: e.target.value})
+        console.log(userAtualizado, "isso")
+    }
+
+    function submit() {
+        atualizarUsuario(userAtualizado)
+    }
+   
 
 
     return (
@@ -118,6 +148,73 @@ function Usuario(){
                 <DialogActions>
                     <Button sx= {{ backgroundColor: 'white', color: 'black', '&:hover': {backgroundColor: 'grey', color: 'white'} }} onClick={handleClose} variant="contained" >Cancelar</Button>
                     <Button sx= {{ backgroundColor: 'white', color: 'red', '&:hover': {backgroundColor: 'red', color: 'white'} }} onClick={() => deletarUsuario(usuario.username)} variant="contained"> Deletar</Button>
+                </DialogActions>
+            </Dialog>
+        </div>
+
+        <div>
+       
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogContent>
+                    <Grid item sx={{color: 'black'}}>
+                        <Typography>
+                        Atualizar o usuário <b>{usuario.username}</b>
+                        </Typography>
+                    </Grid>
+                    <Grid>
+                        <TextField
+                        fullWidth
+                        margin="dense"
+                        label="Nome de usuário atual"
+                        id="userupdate"
+                        onChange={handleChange}
+                        />
+                    </Grid>
+                    <Grid>
+                        <TextField
+                        fullWidth
+                        margin="dense"
+                        label="Primeiro nome"
+                        id="firstName"
+                        onChange={handleChange}
+                        />
+                    </Grid>
+                    <Grid>
+                        <TextField
+                        fullWidth
+                        margin="dense"
+                        label="Sobrenome"
+                        id="lastName"
+                        onChange={handleChange}
+                        />
+                    </Grid>
+                    <Grid>
+                        <TextField
+                        fullWidth
+                        margin="dense"
+                        label="Email"
+                        id="email"
+                        onChange={handleChange}
+                        />
+                    </Grid>
+                    <Grid>
+                        <TextField
+                        fullWidth
+                        margin="dense"
+                        label="Novo nome de usuário"
+                        id="username"
+                        onChange={handleChange}
+                        />
+                    </Grid>
+                </DialogContent>
+                <DialogActions>
+                    <Button sx= {{ backgroundColor: 'white', color: 'black', '&:hover': {backgroundColor: 'grey', color: 'white'} }} onClick={handleClose} variant="contained" >Cancelar</Button>
+                    <Button sx= {{ backgroundColor: 'white', color: 'red', '&:hover': {backgroundColor: 'red', color: 'white'} }} onClick={() => atualizarUsuario(userAtualizado)} variant="contained"> Alterar</Button>
                 </DialogActions>
             </Dialog>
         </div>
@@ -157,6 +254,9 @@ function Usuario(){
 
                 <p> Ações </p>
                 <br></br>
+                 <Button sx={{ color:'green', borderColor: 'green' }} onClick={() => (setOpen(true))} variant="outlined" startIcon={<EditIcon />}>
+                    Alterar
+                </Button>
                 &ensp;
                 <Button sx={{ color:'red', borderColor: 'red' }} onClick={() => (setOpen(true))} variant="outlined" startIcon={<DeleteIcon />}>
                     Deletar
@@ -187,9 +287,7 @@ function Usuario(){
             </TableContainer>
         </div>
         //Botão para alterar dados do usuário ainda  sem funcionamento. Inserir logo após a linha 159 quando funcional. 
-        /* <Button sx={{ color:'green', borderColor: 'green' }} component={Link} to={`/usuario/${usuario[0]}`} variant="outlined" startIcon={<EditIcon />}>
-                    Alterar
-                </Button> */
+       
      
     )
 }
