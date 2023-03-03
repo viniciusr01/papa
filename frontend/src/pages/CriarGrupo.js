@@ -94,8 +94,8 @@ function CriarPolítica(){
      
         <div className={styles.form_container}>
             
-            <h1>Novo grupo de políticas</h1>
-            <p> Formulário para criação de novo grupo de políticas de acesso aos serviços do ambiente do GSI/MPMG</p>
+            <h1>Novo Grupo</h1>
+            <p> Formulário para criação de novo grupo de usuários para acesso aos serviços do ambiente do GSI/MPMG</p>
 
             <form onSubmit={submit} className={styles.form}>    
 
@@ -107,7 +107,7 @@ function CriarPolítica(){
                 />
 
                 
-                <h4>Selecione projetos do Gitlab:</h4>
+                <h4>Selecione os projetos do Gitlab aos quais os usuários terão acesso</h4>
                         
                 <MultipleSelect 
                 name="projectsgitlab"
@@ -119,10 +119,11 @@ function CriarPolítica(){
                 isLoading={false}
                 isRtl={false}/>
                 
-                <br></br>
-                <h4>Selecione um grupo do FreeIPA:</h4>
+
+                <h4>Grupo do FreeIPA ao qual os usuários terão acesso.</h4>
                 
                 <Select name="grupo_id" 
+                        text="Selecione o grupo"
                         options={groupsipa}
                         handleOnChange={handleGroup}
                         

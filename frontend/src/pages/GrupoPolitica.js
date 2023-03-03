@@ -15,8 +15,6 @@ import Paper from '@mui/material/Paper';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
-import WifiProtectedSetupIcon from '@mui/icons-material/WifiProtectedSetup';
-import GitHubIcon from '@mui/icons-material/GitHub';
 import Button from '@mui/material/Button';
 
 
@@ -57,7 +55,7 @@ function union(a, b) {
 
 function GrupoPolitica(){
 
-
+    //const navigate = useNavigate();
 
 
     const { policyID } = useParams()
@@ -66,13 +64,11 @@ function GrupoPolitica(){
 
     const [glProjects, setGLProjects] = useState([])
 
-    const [gpMember, setGpMember] = useState([])
-
     const [open, setOpen] = useState(false);
 
     const [openAddMember, setOpenAddMember] = useState(false);
 
-    
+
 
     function addMembros(policyID, usernames){
         fetch(`http://localhost:5000/user/policy`,{
@@ -116,32 +112,6 @@ function GrupoPolitica(){
     }
 
 
-    function associarUsuariosGitLab(usernames, projetos){
-
-        console.log(usernames, projetos)
-
-        
-        fetch(`http://localhost:5000/gitlab/project`,{
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                "usernames": usernames,
-                "projects": projetos
-            })
-        })
-            .then((resp) => resp.json())
-            .then((data) => {
-                console.log(data)
-            })
-            .catch((error)=> console.log(error))
-
-            //window.location.replace(`http://localhost:3000/politicas`);
-        
-    }
-
-
     const handleClose = () => {
       setOpen(false);
     };
@@ -164,7 +134,6 @@ function GrupoPolitica(){
                 console.log(data)
                 setGpPolitica(data)
                 setGLProjects(data.projectsgitlab)
-                setGpMember(data.members)
             })
             .catch((error)=> console.log(error))
 
@@ -282,7 +251,7 @@ function GrupoPolitica(){
                 />
             }
             title={title}
-            subheader={`${numberOfChecked(items)}/${items.length} selecionados`}
+            subheader={`${numberOfChecked(items)}/${items.length} selected`}
             />
 
             <Divider />
@@ -345,12 +314,12 @@ function GrupoPolitica(){
             >
                 <DialogContent>
                     <DialogContentText sx = {{color: 'black', fontWeight:'500'}}id="alert-dialog-description">
-                      Você tem certeza que deseja excluir o grupo de política <b>{gpPolitica.name}</b>?
+                      Você tem certeza que dejesa deletar o grupo de política <b>{gpPolitica.name}</b>?
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button sx= {{ backgroundColor: 'white', color: 'black', '&:hover': {backgroundColor: 'grey', color: 'white'} }} onClick={handleClose} variant="contained" >Cancelar</Button>
-                    <Button sx= {{ backgroundColor: 'white', color: 'red', '&:hover': {backgroundColor: 'red', color: 'white'} }} onClick={() => deletarGrupoPolitica(gpPolitica.policyid)} variant="contained"> Excluir grupo</Button>
+                    <Button sx= {{ backgroundColor: 'white', color: 'red', '&:hover': {backgroundColor: 'red', color: 'white'} }} onClick={() => deletarGrupoPolitica(gpPolitica.policyid)} variant="contained"> Deletar</Button>
                 </DialogActions>
             </Dialog>
         </div>
@@ -365,13 +334,13 @@ function GrupoPolitica(){
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle sx={{color: 'white', backgroundColor: 'black'}} id="alert-dialog-title">
-                    {"Associar usuários ao grupo de política"}
+                    {"Adiconar Membros"}
                 </DialogTitle>
                 <DialogContent>
 
                     <br></br>
                     <Grid container spacing={2} justifyContent="center" alignItems="center">
-                        <Grid item>{customList('Não associados', nomesEsquerda)}</Grid>
+                        <Grid item>{customList('Choices', nomesEsquerda)}</Grid>
                         <Grid item>
                             <Grid container direction="column" alignItems="center">
                                 <Button
@@ -396,7 +365,7 @@ function GrupoPolitica(){
                                 </Button>
                             </Grid>
                         </Grid>
-                        <Grid item>{customList('Associados', right)}</Grid>
+                        <Grid item>{customList('Chosen', right)}</Grid>
                     </Grid>
                 </DialogContent>
 
@@ -405,7 +374,7 @@ function GrupoPolitica(){
 
                 <DialogActions>
                     <Button sx= {{ backgroundColor: 'white', color: 'black', '&:hover': {backgroundColor: 'grey', color: 'white'} }} onClick={handleCloseAddMember} variant="contained" >Cancelar</Button>
-                    <Button sx= {{ backgroundColor: 'green', color: 'white', '&:hover': {backgroundColor: 'white', color: 'green'} }} onClick={() => addMembros(policyID, right)} variant="contained" >Associar</Button>
+                    <Button sx= {{ backgroundColor: 'green', color: 'white', '&:hover': {backgroundColor: 'white', color: 'green'} }} onClick={() => addMembros(policyID, right)} variant="contained" >Add</Button>
                 </DialogActions>
             </Dialog>
         </div>
@@ -443,70 +412,24 @@ function GrupoPolitica(){
 
                 <div className={styles.gpPolitica_buttonsAction}>
 
-                
-
-                <p> Membros </p>
-                <br></br>
-                
-                {
-                    gpMember == null 
-
-                    ?
-
-                    <div>
-                        <span>Nenhum usuário associado ao grupo</span>
-                        <br></br>
-                        <br></br>
-                    </div>
-                    
-                    :
-                    
-                    Object.values(gpMember).map((item) => 
-                        <Table key={item}>
-                            <TableBody>
-                                <TableCell  sx={{textAlign: 'center'}}>{item}</TableCell>
-                            </TableBody>
-                        </Table>
-                    )
-
-                   
-                }
-                                
-
-
                 <p> Ações </p>
                 <br></br>
+               
+                <Button sx={{ color:'red', borderColor: 'red' }} onClick={() => (setOpen(true))} variant="outlined" startIcon={<DeleteIcon />}>
+                    Deletar
+                </Button>
+                &ensp;
 
                 <Button onClick={() => (setOpenAddMember(true))} variant="outlined" startIcon={<GroupAddIcon />}>
-                    Associar usuários
-                </Button>
-                &ensp;
-
-
-                <Button sx={{ color:'#E24329', borderColor: '#E24329' }} onClick={() => (associarUsuariosGitLab(gpMember, glProjects))} variant="outlined" startIcon={<GitHubIcon />}>
-                    Associar usuários no GitLab
-                </Button>
-                &ensp;
-
-                <Button sx={{ color:'green', borderColor: 'green' }} onClick={() => (setOpenAddMember(true))} variant="outlined" startIcon={<WifiProtectedSetupIcon />}>
-                    Associar usuários no FreeIPA
+                    Adicionar Membros
                 </Button>
                 &ensp;
 
                
-                <Button sx={{ color:'red', borderColor: 'red' }} onClick={() => (setOpen(true))} variant="outlined" startIcon={<DeleteIcon />}>
-                    Excluir Grupo
-                </Button>
-                &ensp;
-
-                
-                
                 <br></br>
                 <br></br>
-
                 </div>
-                
-                
+
 
             </TableContainer>
             

@@ -4,7 +4,7 @@ function Select({ text, name, options, handleOnChange, value}){
 console.log(options);
     return(
         <div className={styles.form_control}>
-            <label htmlFor={name}>{text}</label>
+            <label htmlFor={name}>{text}:</label>
             <select name={name} id={name} onChange={handleOnChange} >
                 <option>Selecione um grupo</option>
                {options.map((option) =>(

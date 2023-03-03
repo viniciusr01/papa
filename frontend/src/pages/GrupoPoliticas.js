@@ -43,6 +43,7 @@ function GrupoPoliticas(){
        
         <div className={styles.grupoPoliticas_container}>
             
+            
 
             <Button sx={{position: 'absolute', right: '11%'}} component={Link} to={'/criargrupo'} variant="contained" startIcon={<AddIcon />}>
                 Criar novo grupo de politica
@@ -70,7 +71,7 @@ function GrupoPoliticas(){
                                     borderBottomRightRadius:'0.5em',
                                   }}
                         >
-                             <Typography sx={{ fontWeight: 'bold', fontSize: 16}}>{gp.name}</Typography>
+                             <Typography sx={{ fontWeight: 'bold', fontSize: 16 }}>{gp.name}</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
                             <Typography>
@@ -87,7 +88,7 @@ function GrupoPoliticas(){
                                     <br></br>
 
                             <Button component={Link} to={`/politica/${gp.policyid}`} variant="outlined" startIcon={<ReadMoreIcon />}>
-                                Gerir Grupo
+                                Detalhes
                             </Button>
                         </AccordionDetails>
  
