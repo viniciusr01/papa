@@ -1,10 +1,12 @@
 import styles from './SubmitButton.module.css'
+import { useNavigate } from 'react-router-dom'
 
-function SubmitButton({ text }){
+function SubmitButton({ text , route}){
+    const navigate = useNavigate();
 
     return(
         <div>
-            <button className={styles.btn}>{text}</button>
+            <button onClick={() => navigate({route})} className={styles.btn}>{text}</button>
         </div>
     )
 

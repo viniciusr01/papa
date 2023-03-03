@@ -130,7 +130,7 @@ function CriarPolítica(){
                 />
                 
 
-            <SubmitButton text="Criar grupo" />
+            <SubmitButton route="/politicas" text="Criar grupo" />
             </form>
 
         </div>

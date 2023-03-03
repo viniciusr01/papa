@@ -119,7 +119,7 @@ function FormularioCadastro(){
                         
                 />
 
-                <SubmitButton text="Enviar solicitação" />
+                <SubmitButton route="/usuarios" text="Enviar solicitação" />
             </form>
 
         </div>
