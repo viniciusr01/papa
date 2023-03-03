@@ -14,6 +14,8 @@ import Paper from '@mui/material/Paper';
 
 
 import ReadMoreIcon from '@mui/icons-material/ReadMore';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+
 import Button from '@mui/material/Button';
 
 
@@ -52,7 +54,7 @@ function Usuarios(){
                   <TableCell sx={{ fontWeight: 'bold', fontSize: 16 }} >Nome</TableCell>
                   <TableCell sx={{ fontWeight: 'bold', fontSize: 16 }} align="center">Email</TableCell>
                   <TableCell sx={{ fontWeight: 'bold', fontSize: 16 }} align="center">Username&nbsp;</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', fontSize: 16 }} align="center">Ação</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', fontSize: 16 }} align="center">Ações</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -64,14 +66,19 @@ function Usuarios(){
                     <TableCell component="th" scope="row">
                       {row.fullname}
                     </TableCell>
-                    <TableCell align="center">{row.username}</TableCell>
                     <TableCell align="center">{row.email}</TableCell>
+                    <TableCell align="center">{row.username}</TableCell>
                     <TableCell align="center">
 
                       <Button component={Link} to={`/usuario/${row.username}`} variant="outlined" startIcon={<ReadMoreIcon />}>
-                          Detalhes
+                          Editar
                       </Button>
-                       
+                      &ensp;      
+                      <Button component={Link} to={`/usuario/${row.username}`} variant="outlined" startIcon={<CheckCircleOutlineIcon />} disabled>
+                          Validar
+                      </Button>
+                      &ensp;
+
                     </TableCell>
                   </TableRow>
                 ))}

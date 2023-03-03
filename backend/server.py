@@ -163,11 +163,25 @@ def projectGitLab():
 
         data = request.get_json()
 
-        username  = data['username']
-        idProject = data['idproject']
-        accessLevel= data['accesslevel']
-      
-        return GL.putUserInAProject(username, idProject, accessLevel)
+        usernames  = data['usernames']
+        projects = data['projects']
+        accessLevel= 'Developer'
+        
+        print(projects)
+
+        for p in projects:
+            print(type(p))
+
+        
+        for user in usernames:
+            for project in projects:
+                projectID = projects[project]['id']
+                print(user)
+                print(project, projectID)
+        
+        #GL.putUserInAProject(username, idProject, accessLevel)
+        
+        return 'ok'
 
 
 @app.route("/ipa")

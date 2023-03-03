@@ -142,12 +142,79 @@ function Usuario(){
             >
                 <DialogContent>
                     <DialogContentText sx = {{color: 'black', fontWeight:'500'}}id="alert-dialog-description">
-                      Você tem certeza que dejesa deletar o usuário <b>{usuario.username}</b>?
+                      Você tem certeza que deseja excluir o usuário <b>{usuario.username}</b>?
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button sx= {{ backgroundColor: 'white', color: 'black', '&:hover': {backgroundColor: 'grey', color: 'white'} }} onClick={handleClose} variant="contained" >Cancelar</Button>
-                    <Button sx= {{ backgroundColor: 'white', color: 'red', '&:hover': {backgroundColor: 'red', color: 'white'} }} onClick={() => deletarUsuario(usuario.username)} variant="contained"> Deletar</Button>
+                    <Button sx= {{ backgroundColor: 'white', color: 'red', '&:hover': {backgroundColor: 'red', color: 'white'} }} onClick={() => deletarUsuario(usuario.username)} variant="contained"> Excluir</Button>
+                </DialogActions>
+            </Dialog>
+        </div>
+
+        <div>
+       
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogContent>
+                    <Grid item sx={{color: 'black'}}>
+                        <Typography>
+                        Atualizar o usuário <b>{usuario.username}</b>
+                        </Typography>
+                    </Grid>
+                    <Grid>
+                        <TextField
+                        fullWidth
+                        margin="dense"
+                        label="Nome de usuário atual"
+                        id="userupdate"
+                        onChange={handleChange}
+                        />
+                    </Grid>
+                    <Grid>
+                        <TextField
+                        fullWidth
+                        margin="dense"
+                        label="Primeiro nome"
+                        id="firstName"
+                        onChange={handleChange}
+                        />
+                    </Grid>
+                    <Grid>
+                        <TextField
+                        fullWidth
+                        margin="dense"
+                        label="Sobrenome"
+                        id="lastName"
+                        onChange={handleChange}
+                        />
+                    </Grid>
+                    <Grid>
+                        <TextField
+                        fullWidth
+                        margin="dense"
+                        label="Email"
+                        id="email"
+                        onChange={handleChange}
+                        />
+                    </Grid>
+                    <Grid>
+                        <TextField
+                        fullWidth
+                        margin="dense"
+                        label="Novo nome de usuário"
+                        id="username"
+                        onChange={handleChange}
+                        />
+                    </Grid>
+                </DialogContent>
+                <DialogActions>
+                    <Button sx= {{ backgroundColor: 'white', color: 'black', '&:hover': {backgroundColor: 'grey', color: 'white'} }} onClick={handleClose} variant="contained" >Cancelar</Button>
+                    <Button sx= {{ backgroundColor: 'white', color: 'red', '&:hover': {backgroundColor: 'red', color: 'white'} }} onClick={() => atualizarUsuario(userAtualizado)} variant="contained"> Alterar</Button>
                 </DialogActions>
             </Dialog>
         </div>
@@ -227,8 +294,8 @@ function Usuario(){
                 <TableRow>
                     <TableCell sx={{ fontWeight: 'bold', fontSize: 16 }} >Username&nbsp;</TableCell>
                     <TableCell sx={{ fontWeight: 'bold', fontSize: 16 }} align="center">Email</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold', fontSize: 16 }} align="center">FreeIPA</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold', fontSize: 16 }} align="center">GitLab</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold', fontSize: 16 }} align="center">Já cadastrado no FreeIPA?</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold', fontSize: 16 }} align="center">Já cadastrado no GitLab?</TableCell>
                 </TableRow>
                 </TableHead>
                 <TableBody>
@@ -273,12 +340,23 @@ function Usuario(){
                 : 
 
                 <Button  onClick={() => (criarUsuarioIpaGitlab(usuario.username))} variant="outlined" startIcon={<GroupAddIcon />}>
-                    Criar usuário no IPA e no GitLab
+                    Cadastrar usuário no FreeIPA e no GitLab
                 </Button>
                 
                 }
                 
                 &ensp;
+
+                <Button sx={{ color:'green', borderColor: 'green' }} component={Link} to={`/usuario/${usuario[0]}`} variant="outlined" startIcon={<EditIcon />}>
+                    Editar
+                </Button>
+                &ensp;
+                <Button sx={{ color:'red', borderColor: 'red' }} onClick={() => (setOpen(true))} variant="outlined" startIcon={<DeleteIcon />}>
+                    Excluir
+                </Button>
+                &ensp;
+
+                
                 <br></br>
                 <br></br>
                 </div>
