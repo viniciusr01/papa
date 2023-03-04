@@ -35,7 +35,9 @@ function Usuario(){
     const [usuario, setUsuario] = useState([])
     const [userAtualizado, setUserAtualizado] = useState([])
 
-    const [open, setOpen] = React.useState(false);
+    const [openDelete, setOpenDelete] = React.useState(false);
+    const [openUpdate, setOpenUpdate] = React.useState(false);
+
 
     function deletarUsuario(username){
 
@@ -94,9 +96,13 @@ function Usuario(){
     }
    
 
-    const handleClose = () => {
-      setOpen(false);
+    const handleCloseDelete = () => {
+      setOpenDelete(false);
     };
+
+    const handleCloseUpdate = () => {
+        setOpenUpdate(false);
+      };
 
 
     useEffect(() => {
@@ -135,8 +141,8 @@ function Usuario(){
         <div>
        
             <Dialog
-                open={open}
-                onClose={handleClose}
+                open={openDelete}
+                onClose={handleCloseDelete}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
@@ -146,7 +152,7 @@ function Usuario(){
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button sx= {{ backgroundColor: 'white', color: 'black', '&:hover': {backgroundColor: 'grey', color: 'white'} }} onClick={handleClose} variant="contained" >Cancelar</Button>
+                    <Button sx= {{ backgroundColor: 'white', color: 'black', '&:hover': {backgroundColor: 'grey', color: 'white'} }} onClick={handleCloseDelete} variant="contained" >Cancelar</Button>
                     <Button sx= {{ backgroundColor: 'white', color: 'red', '&:hover': {backgroundColor: 'red', color: 'white'} }} onClick={() => deletarUsuario(usuario.username)} variant="contained"> Excluir</Button>
                 </DialogActions>
             </Dialog>
@@ -155,8 +161,8 @@ function Usuario(){
         <div>
        
             <Dialog
-                open={open}
-                onClose={handleClose}
+                open={openUpdate}
+                onClose={handleCloseDelete}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
@@ -213,7 +219,7 @@ function Usuario(){
                     </Grid>
                 </DialogContent>
                 <DialogActions>
-                    <Button sx= {{ backgroundColor: 'white', color: 'black', '&:hover': {backgroundColor: 'grey', color: 'white'} }} onClick={handleClose} variant="contained" >Cancelar</Button>
+                    <Button sx= {{ backgroundColor: 'white', color: 'black', '&:hover': {backgroundColor: 'grey', color: 'white'} }} onClick={handleCloseUpdate} variant="contained" >Cancelar</Button>
                     <Button sx= {{ backgroundColor: 'white', color: 'red', '&:hover': {backgroundColor: 'red', color: 'white'} }} onClick={() => atualizarUsuario(userAtualizado)} variant="contained"> Alterar</Button>
                 </DialogActions>
             </Dialog>
@@ -274,11 +280,11 @@ function Usuario(){
                 
                 &ensp;
 
-                <Button sx={{ color:'green', borderColor: 'green' }} onClick={() => (setOpen(true))} variant="outlined" startIcon={<EditIcon />}>
+                <Button sx={{ color:'green', borderColor: 'green' }} onClick={() => (setOpenUpdate(true))} variant="outlined" startIcon={<EditIcon />}>
                     Editar
                 </Button>
                 &ensp;
-                <Button sx={{ color:'red', borderColor: 'red' }} onClick={() => (setOpen(true))} variant="outlined" startIcon={<DeleteIcon />}>
+                <Button sx={{ color:'red', borderColor: 'red' }} onClick={() => (setOpenDelete(true))} variant="outlined" startIcon={<DeleteIcon />}>
                     Excluir
                 </Button>
                 &ensp;
