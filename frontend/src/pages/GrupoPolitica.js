@@ -483,7 +483,7 @@ function GrupoPolitica(){
                 </Button>
                 &ensp;
 
-                <Button sx={{ color:'green', borderColor: 'green' }} onClick={() => (setOpenAddMember(true))} variant="outlined" startIcon={<WifiProtectedSetupIcon />}>
+                <Button disabled sx={{ color:'green', borderColor: 'green' }} onClick={() => (setOpenAddMember(true))} variant="outlined" startIcon={<WifiProtectedSetupIcon />}>
                     Associar usuários no FreeIPA
                 </Button>
                 &ensp;
