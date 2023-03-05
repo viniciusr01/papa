@@ -114,9 +114,31 @@ function GrupoPolitica(){
     }
 
 
-    function associarUsuariosGitLab(usernames, projetos){
+    function associarUsuariosFreeIPA(usernames, grupoIPA){
+        console.log(usernames, grupoIPA)
 
-        console.log(usernames, projetos)
+        fetch(`http://localhost:5000/ipa/group`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "usernames": usernames,
+                "grupoIPA": grupoIPA
+            })
+        })
+            .then((resp) => resp.json())
+            .then((data) => {
+                console.log(data)
+            })
+            .catch((error)=> console.log(error))
+
+            //window.location.replace(`http://localhost:3000/politicas`);
+
+
+    }
+
+    function associarUsuariosGitLab(usernames, projetos){
 
 
         fetch(`http://localhost:5000/gitlab/project`,{
@@ -483,7 +505,7 @@ function GrupoPolitica(){
                 </Button>
                 &ensp;
 
-                <Button disabled sx={{ color:'green', borderColor: 'green' }} onClick={() => (setOpenAddMember(true))} variant="outlined" startIcon={<WifiProtectedSetupIcon />}>
+                <Button  sx={{ color:'green', borderColor: 'green' }} onClick={() => (associarUsuariosFreeIPA(gpMember, gpPolitica.groupipa))} variant="outlined" startIcon={<WifiProtectedSetupIcon />}>
                     Associar usuários no FreeIPA
                 </Button>
                 &ensp;
