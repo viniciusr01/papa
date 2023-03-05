@@ -195,8 +195,8 @@ def groupIPA():
             print(data)
            
             for user in usernames:
-                pass
-
+                IPA.putUserInGroupIPA(user, groupIPA)
+            
             return 'Sucesso ao associar os usuários no grupo do FreeIPA'
         
     except Exception as error:

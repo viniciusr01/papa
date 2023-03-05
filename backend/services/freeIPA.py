@@ -55,13 +55,14 @@ class FreeIPA:
         
 
 
-    def putUserInGroupIPA(self, userName, groupID):
+    def putUserInGroupIPA(self, userName, groupName):
 
         try:
             client = self.ipaAuth()
 
-            group = client.group_find(o_gidnumber= groupID)
-            group_cn = group['result'][0]['cn'][0]
+            #group = client.group_find(o_gidnumber= groupID)
+            #group_cn = group['result'][0]['cn'][0]
+            group_cn = groupName
 
             client.group_add_member(a_cn=group_cn, o_user=userName)
 

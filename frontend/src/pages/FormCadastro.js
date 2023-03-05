@@ -112,12 +112,6 @@ function FormularioCadastro(){
                         handleOnChange={handleChange}
                 />
 
-                <Select name="grupo_id" 
-                        text="Selecione o grupo"
-                        options={groupsipa}
-                        handleOnChange={handleGroup}
-                        
-                />
 
                 <SubmitButton route="/usuarios" text="Enviar solicitação" />
             </form>

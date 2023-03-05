@@ -20,8 +20,7 @@ function Home(){
                     <Grid xs={6}>
                         <h1 className={styles.h1}> PIPA </h1>
                         <p className={styles.p}>
-                            O PIPA (Plataforma Integrada de Políticas de Acesso) é uma plataforma com foco em 
-                            centralizar o gerenciamento de autorização dos diversos serviços de autorização do 
+                            O PIPA (Plataforma Integrada de Políticas de Acesso) é uma plataforma de gerenciamento de autorização de serviços de autorização do 
                             ambiente computacional do GSI/MPMG
                         </p>
 
@@ -33,23 +32,28 @@ function Home(){
                     <Grid xs={6}>
                         <Grid container spacing={2} columns={6}>
                             <Grid xs={3}>
+
                                 <div className={styles.Container}>
-                                    <button className={styles.btn} onClick={() => history("/criargrupo")}><h1>Criar novo Grupo do PIPA</h1></button>
+                                    <button className={styles.btn} onClick={() => history("/cadastro")}><h1>Cadastrar usuário</h1></button>
                                 </div>
 
                                 <div className={styles.Container}>
-                                    <button className={styles.btn} onClick={() => history("/cadastro")}><h1>Cadastrar novo usuário</h1></button>
+                                    <button className={styles.btn} onClick={() => history("/politicas")}><h1>Associar usuários a um grupo</h1></button>
                                 </div>
+
+                                
 
                             </Grid>
 
                             <Grid xs={3}>
-                                <div className={styles.Container}>
-                                    <button className={styles.btn} onClick={() => history("/politicas")}><h1>Adicionar usuários a um grupo</h1></button>
-                                </div>
 
                                 <div className={styles.Container}>
-                                    <button className={styles.btn} onClick={() => history("/politicas")}><h1>Visualizar grupos vigentes</h1></button>
+                                    <button className={styles.btn} onClick={() => history("/criargrupo")}><h1>Criar grupo de políticas</h1></button>
+                                </div>
+                               
+
+                                <div className={styles.Container}>
+                                    <button className={styles.btn} onClick={() => history("/politicas")}><h1>Visualizar grupos</h1></button>
                                 </div>
 
                             </Grid>
