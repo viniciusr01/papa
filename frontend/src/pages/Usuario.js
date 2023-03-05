@@ -128,7 +128,7 @@ function Usuario(){
         console.log(userAtualizado, "isso")
     }
 
-    function submit() {
+    const submit = () => {
         atualizarUsuario(userAtualizado)
     }
    
@@ -177,7 +177,7 @@ function Usuario(){
                         fullWidth
                         margin="dense"
                         label="Nome de usuário atual"
-                        id="userupdate"
+                        name="userupdate"
                         onChange={handleChange}
                         />
                     </Grid>
@@ -186,7 +186,7 @@ function Usuario(){
                         fullWidth
                         margin="dense"
                         label="Primeiro nome"
-                        id="firstName"
+                        name="firstName"
                         onChange={handleChange}
                         />
                     </Grid>
@@ -195,7 +195,7 @@ function Usuario(){
                         fullWidth
                         margin="dense"
                         label="Sobrenome"
-                        id="lastName"
+                        name="lastName"
                         onChange={handleChange}
                         />
                     </Grid>
@@ -204,7 +204,7 @@ function Usuario(){
                         fullWidth
                         margin="dense"
                         label="Email"
-                        id="email"
+                        name="email"
                         onChange={handleChange}
                         />
                     </Grid>
@@ -213,14 +213,14 @@ function Usuario(){
                         fullWidth
                         margin="dense"
                         label="Novo nome de usuário"
-                        id="username"
+                        name="username"
                         onChange={handleChange}
                         />
                     </Grid>
                 </DialogContent>
                 <DialogActions>
                     <Button sx= {{ backgroundColor: 'white', color: 'black', '&:hover': {backgroundColor: 'grey', color: 'white'} }} onClick={handleCloseUpdate} variant="contained" >Cancelar</Button>
-                    <Button sx= {{ backgroundColor: 'white', color: 'red', '&:hover': {backgroundColor: 'red', color: 'white'} }} onClick={() => atualizarUsuario(userAtualizado)} variant="contained"> Alterar</Button>
+                    <Button sx= {{ backgroundColor: 'white', color: 'red', '&:hover': {backgroundColor: 'red', color: 'white'} }} onClick={() => submit(userAtualizado)} variant="contained"> Alterar</Button>
                 </DialogActions>
             </Dialog>
         </div>
