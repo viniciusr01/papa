@@ -57,32 +57,58 @@ class GitLab():
              return "Failed to get projecst in Gitlab: " + str(erro)
 
 
+    def userIsMemberOfAProject(self, userName, idProject):
+        try:
+            gl = self.createConnectionWithGitLab()
+
+            project = gl.projects.get(idProject)
+            members = project.members.list()
+
+            membersList = []
+
+            for user in members:
+                membersList.append(user.username)
+
+            if(userName in membersList):
+                print(userName)
+                return True
+            else:
+                return False
+        
+        except Exception as erro:
+             return "Failed to verify user: " + str(erro)
+
 
     def putUserInAProject(self, userName, idProject, accessLevel):
 
         try:
-            gl = self.createConnectionWithGitLab()
 
-            user = gl.users.list(search=userName)
-            idUser = user[0].id
+            if(self.userIsMemberOfAProject(userName, idProject)):
+                print("O usuário " + userName + " já é membro do projeto!")
+                return "O usuário " + userName + " já é membro do projeto!"
+            else:
+                gl = self.createConnectionWithGitLab()
 
-            project = gl.projects.get(idProject)
+                user = gl.users.list(search=userName)
+                idUser = user[0].id
 
-            if(accessLevel == 'Guest'):
-                accessLevel = gitlab.const.AccessLevel.GUEST
-            if(accessLevel == 'Reporter'):
-                accessLevel = gitlab.const.AccessLevel.REPORTER
-            if(accessLevel == 'Developer'):
-                accessLevel = gitlab.const.AccessLevel.DEVELOPER
-            if(accessLevel == 'Maintainer'):
-                accessLevel = gitlab.const.AccessLevel.MAINTAINER
-            if(accessLevel == 'Owner'):
-                accessLevel = gitlab.const.AccessLevel.OWNER
+                project = gl.projects.get(idProject)
 
-            member = project.members.create({ 'user_id': idUser,
-                                            'access_level': accessLevel})
+                if(accessLevel == 'Guest'):
+                    accessLevel = gitlab.const.AccessLevel.GUEST
+                if(accessLevel == 'Reporter'):
+                    accessLevel = gitlab.const.AccessLevel.REPORTER
+                if(accessLevel == 'Developer'):
+                    accessLevel = gitlab.const.AccessLevel.DEVELOPER
+                if(accessLevel == 'Maintainer'):
+                    accessLevel = gitlab.const.AccessLevel.MAINTAINER
+                if(accessLevel == 'Owner'):
+                    accessLevel = gitlab.const.AccessLevel.OWNER
 
-            return "O usuário " + userName + " foi adicionado ao projeto com sucesso!"
+                member = project.members.create({ 'user_id': idUser,
+                                                'access_level': accessLevel})
+
+                return "O usuário " + userName + " foi adicionado ao projeto com sucesso!"
 
         except Exception as erro:
             return "Failed to put user in a Gitlab project: " + str(erro)

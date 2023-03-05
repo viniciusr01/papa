@@ -167,27 +167,41 @@ def projectGitLab():
         projects = data['projects']
         accessLevel= 'Developer'
 
-        print(projects)
-
-        for p in projects:
-            print(type(p))
-
-
+        
         for user in usernames:
             for project in projects:
                 projectID = projects[project]['id']
-                print(user)
-                print(project, projectID)
+                GL.putUserInAProject(user, projectID, accessLevel)
 
-        #GL.putUserInAProject(username, idProject, accessLevel)
-
-        return 'ok'
+        return 'Sucesso ao associar os usuários aos projetos do GitLab'
 
 
 @app.route("/ipa")
 @app.route("/ipa/getGroups", methods = ['GET'])
 def getGroupsIPA():
     return IPA.getGroupsIPA()
+
+@app.route("/ipa/group", methods = ['POST'])
+def groupIPA():
+
+    try:
+        if request.method == 'POST':
+
+            data = request.get_json()
+
+            usernames  = data['usernames']
+            groupIPA = data['grupoIPA']
+
+            print(data)
+           
+            for user in usernames:
+                pass
+
+            return 'Sucesso ao associar os usuários no grupo do FreeIPA'
+        
+    except Exception as error:
+             return "Failed to put users in a FreeIPA group" + str(error)
+
 
 
 @app.route("/policy", methods = ['GET', 'POST', 'PUT', 'DELETE'])
@@ -276,16 +290,5 @@ def policyMembers():
         except Exception as error:
             return "Failed to get the members of a policy from the database: " + str(error)
        
-
-    if request.method == 'POST':
-
-        try:
-            data = request.get_json()
-            
-            return data
-        
-        except Exception as error:
-             return "Failed to insert members policy data into database:" + str(error)
-
 
 app.run(debug=True)
