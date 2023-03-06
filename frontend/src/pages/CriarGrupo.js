@@ -106,8 +106,8 @@ function CriarPolítica(){
                         handleOnChange={handleChange}
                 />
 
-                
-                <h4>Selecione os projetos do Gitlab aos quais os usuários terão acesso</h4>
+                <br></br>
+                <h4>Selecione os projetos do Gitlab</h4>
                         
                 <MultipleSelect 
                 name="projectsgitlab"
@@ -119,11 +119,10 @@ function CriarPolítica(){
                 isLoading={false}
                 isRtl={false}/>
                 
-
-                <h4>Grupo do FreeIPA ao qual os usuários terão acesso.</h4>
+                <br></br>
+                <h4>Selecione o grupo do FreeIPA</h4>
                 
                 <Select name="grupo_id" 
-                        text="Selecione o grupo"
                         options={groupsipa}
                         handleOnChange={handleGroup}
                         
