@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import Input from '../components/form/Input';
 import SubmitButton from '../components/form/SubmitButton';
 import styles from './CriarGrupo.module.css';
@@ -13,6 +15,8 @@ function CriarPolítica(){
     const [groupsipa, setGroupsipa] = useState([]);
     const [selectedGroupipa, setSelectedGroupipa] = useState([]);
     const [policy, setPolicy] = useState([]);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const projectsgitlabArray = [];
@@ -62,7 +66,8 @@ function CriarPolítica(){
         })
             .then( (resp) => resp.json())
             .catch((err)  => console.log(err))
-        
+            //window.location.replace("http://localhost:3000/politicas");
+
     }
 
     
@@ -70,7 +75,7 @@ function CriarPolítica(){
         e.preventDefault()
        const newState = {...policy, projectsgitlab: selectedProjectsgitlab};
         setPolicy(newState);
-        sendRequestForAddPolicy(newState) 
+        sendRequestForAddPolicy(newState)
     }
 
     function handleChange(e){
@@ -130,7 +135,7 @@ function CriarPolítica(){
                 />
                 
 
-            <SubmitButton route="/politicas" text="Criar grupo" />
+            <SubmitButton text="Criar grupo" />
             </form>
 
         </div>

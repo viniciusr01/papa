@@ -9,6 +9,7 @@ import Footer from './layout/Footer'
 import GrupoPoliticas from './pages/GrupoPoliticas'
 import GrupoPolitica  from './pages/GrupoPolitica'
 import CriarGrupo from './pages/CriarGrupo';
+import SolicitaçãoCadastramento from './pages/SolicitaçãoCadastramento';
 
 
 function App() {
@@ -19,13 +20,15 @@ function App() {
         <Navbar />
 
         <Routes>
-          <Route path="/" index element={<Home/>} ></Route>
+          <Route path="/" index element={<SolicitaçãoCadastramento/>} ></Route>
+          <Route path="/home" index element={<Home/>} ></Route>
           <Route path="cadastro" element={<FormularioCadastro/>}></Route>
           <Route path="usuarios" element={<Usuarios/>}></Route>
           <Route path="usuario/:username" element={<Usuario/>}></Route>
           <Route path="politicas" element={<GrupoPoliticas/>}></Route>
           <Route path="politica/:policyID" element={<GrupoPolitica/>}></Route>
           <Route path="criargrupo" element={<CriarGrupo/>}></Route>
+
 
         </Routes>
 

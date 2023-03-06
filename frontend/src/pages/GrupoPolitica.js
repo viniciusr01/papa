@@ -301,7 +301,7 @@ function GrupoPolitica(){
                 />
             }
             title={title}
-            subheader={`${numberOfChecked(items)}/${items.length} selected`}
+            subheader={`${numberOfChecked(items)}/${items.length} selecionados`}
             />
 
             <Divider />
@@ -384,13 +384,13 @@ function GrupoPolitica(){
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle sx={{color: 'white', backgroundColor: 'black'}} id="alert-dialog-title">
-                    {"Adiconar Membros"}
+                    {"Adicionar Membros"}
                 </DialogTitle>
                 <DialogContent>
 
                     <br></br>
                     <Grid container spacing={2} justifyContent="center" alignItems="center">
-                        <Grid item>{customList('Choices', nomesEsquerda)}</Grid>
+                        <Grid item>{customList('Usuários disponíveis', nomesEsquerda)}</Grid>
                         <Grid item>
                             <Grid container direction="column" alignItems="center">
                                 <Button
@@ -415,7 +415,7 @@ function GrupoPolitica(){
                                 </Button>
                             </Grid>
                         </Grid>
-                        <Grid item>{customList('Chosen', right)}</Grid>
+                        <Grid item>{customList('Usuários adicionados', right)}</Grid>
                     </Grid>
                 </DialogContent>
 
@@ -424,7 +424,7 @@ function GrupoPolitica(){
 
                 <DialogActions>
                     <Button sx= {{ backgroundColor: 'white', color: 'black', '&:hover': {backgroundColor: 'grey', color: 'white'} }} onClick={handleCloseAddMember} variant="contained" >Cancelar</Button>
-                    <Button sx= {{ backgroundColor: 'green', color: 'white', '&:hover': {backgroundColor: 'white', color: 'green'} }} onClick={() => addMembros(policyID, right)} variant="contained" >Add</Button>
+                    <Button sx= {{ backgroundColor: 'green', color: 'white', '&:hover': {backgroundColor: 'white', color: 'green'} }} onClick={() => addMembros(policyID, right)} variant="contained" >Adicionar</Button>
                 </DialogActions>
             </Dialog>
         </div>

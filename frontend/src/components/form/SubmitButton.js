@@ -6,7 +6,7 @@ function SubmitButton({ text , route}){
 
     return(
         <div>
-            <button onClick={() => navigate({route})} className={styles.btn}>{text}</button>
+            <button className={styles.btn}>{text}</button>
         </div>
     )
 
