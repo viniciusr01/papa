@@ -19,10 +19,10 @@ function SolicitaçãoCadastramento(){
 
                     <Grid xs={6}>
                         <h1 className={styles.h1}> PIPA </h1>
-                        <p className={styles.p}>
+                        <h4 className={styles.p}>
                             O PIPA (Plataforma Integrada de Políticas de Acesso) é uma plataforma de gerenciamento de autorização de serviços de autorização do 
                             ambiente computacional do GSI/MPMG
-                        </p>
+                        </h4>
 
                         <img className={styles.logoMPMG} src={logo_mpmg}></img>
                         <img className={styles.logoUFMG} src={logo_ufmg}></img>
