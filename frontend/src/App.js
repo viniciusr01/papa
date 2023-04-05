@@ -1,15 +1,15 @@
 import './App.css';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
-import Home from './pages/Home';
-import FormularioCadastro from './pages/FormCadastro';
-import Usuarios from './pages/Usuarios';
-import Usuario from './pages/Usuario';
+import Home from './pages/Home/Home';
+import FormularioCadastro from './pages/FormCadastro/FormCadastro';
+import Usuarios from './pages/Usuarios/Usuarios';
+import Usuario from './pages/Usuario/Usuario';
 import Navbar from './layout/Navbar';
 import Footer from './layout/Footer'
-import GrupoPoliticas from './pages/GrupoPoliticas'
-import GrupoPolitica  from './pages/GrupoPolitica'
-import CriarGrupo from './pages/CriarGrupo';
-import SolicitaçãoCadastramento from './pages/SolicitaçãoCadastramento';
+import GrupoPoliticas from './pages/GrupoPoliticas/GrupoPoliticas'
+import GrupoPolitica  from './pages/GrupoPolitica/GrupoPolitica'
+import CriarGrupo from './pages/CriarGrupo/CriarGrupo';
+import SolicitaçãoCadastramento from './pages/SolicitaçãoCadastro/SolicitaçãoCadastramento';
 
 
 function App() {
@@ -28,6 +28,7 @@ function App() {
           <Route path="politicas" element={<GrupoPoliticas/>}></Route>
           <Route path="politica/:policyID" element={<GrupoPolitica/>}></Route>
           <Route path="criargrupo" element={<CriarGrupo/>}></Route>
+
 
 
         </Routes>

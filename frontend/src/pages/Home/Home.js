@@ -1,8 +1,8 @@
 import styles from './Home.module.css'
 import { useNavigate } from 'react-router-dom'
 
-import logo_mpmg from '../img/Logo_mpmg.png'
-import logo_ufmg from '../img/logo_dcc.png'
+import logo_mpmg from '../../img/Logo_mpmg.png'
+import logo_ufmg from '../../img/logo_dcc.png';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Unstable_Grid2';
 
