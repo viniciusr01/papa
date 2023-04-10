@@ -91,7 +91,20 @@ def no_ssl_verification():
 from oic.oic.message import ProviderConfigurationResponse
 
 # Informações padrões sobre os end-points do Provedor OpenID (OP - WSO2 IS)
-client.handle_provider_config('https://150.164.10.89:9443/oauth2/token/.well-known/openid-configuration')
+#client.handle_provider_config('https://150.164.10.89:9443/oauth2/token/.well-known/openid-configuration', ['issuer'])
+op_info = ProviderConfigurationResponse( 
+    version="1.0", 
+    issuer= "https://150.164.10.89:9443/",
+    authorization_endpoint="https://150.164.10.89:9443/oauth2/authorize",
+    token_endpoint="https://150.164.10.89:9443/oauth2/token",
+    jwks_uri= "https://150.164.10.89:9443/oauth2/jwks",
+    userinfo_endpoint= "https://150.164.10.89:9443/oauth2/userinfo",
+    revocation_endpoint= "https://150.164.10.89:9443/oauth2/revoke",
+    introspection_endpoint= "https://150.164.10.89:9443/oauth2/introspect",
+    end_session_endpoint= "https://150.164.10.89:9443/oidc/logout"
+    )
+
+client.handle_provider_config(op_info, op_info['issuer'])
 
 # Client ID e Client Secret são geradas pelo Provedor OpenID (OP - WSO2 IS)
 info = {"client_id": "######", 
