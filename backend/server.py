@@ -18,6 +18,7 @@ from oic.oic.message import ProviderConfigurationResponse
 from oic.oic.message import RegistrationResponse
 from oic.oic.message import AuthorizationResponse
 
+from urllib.parse import parse_qs
 
 import sys
 sys.path.insert(0,"..")
@@ -107,8 +108,8 @@ op_info = ProviderConfigurationResponse(
 client.handle_provider_config(op_info, op_info['issuer'])
 
 # Client ID e Client Secret são geradas pelo Provedor OpenID (OP - WSO2 IS)
-info = {"client_id": "######", 
-        "client_secret": "########"
+info = {"client_id": OAUTH_CLIENT_KEY, 
+        "client_secret": OAUTH_CLIENT_SECRET
         }
 
 
@@ -123,17 +124,19 @@ client.store_registration_info(client_reg)
 # Para mais informações sobre o fluxo de autenticação: https://tools.ietf.org/html/rfc6749#section-4.1
 
 # Nesta etapa, ao fim é gerado a URL a qual o usuário deve ser direcionado para realizar o Login.
-
-state = rndstr()
-nonce = rndstr()
+session = {}
+environ = {}
+session["state"] = rndstr()
+session["nonce"] = rndstr()
 
 args = {
-    "client_id": client.client_id,
+    "client_id": 'gVXPQX0P0ffBUn2gs9aG9LGGRtsa',
     "response_type": ['code'], # Determina o fluxo de autorização OAuth 2.0 que será utilizado
     "scope": ["openid email"], #Por padrão é inserido 'openid', mas também pode ser inserido informações a qual deseja ter do usuário, como exemplo, email.
-    "nonce": nonce, #É um valor de string usado para associar uma sessão de cliente a um token de ID e para mitigar ataques de repetição
+    "nonce": session["nonce"], #É um valor de string usado para associar uma sessão de cliente a um token de ID e para mitigar ataques de repetição
     "redirect_uri": ['http://localhost:5000/callback'], #URL que o Provedor OpenID deve retornar após autenticação ser realizada
-    "state": state #É utilizado para controlar as respostas às solicitações pendentes
+    "state": session["state"] #É utilizado para controlar as respostas às solicitações pendentes
+    
 }
 
 auth_req = client.construct_AuthorizationRequest(request_args=args)
@@ -160,17 +163,13 @@ def callback():
    
     # If you're in a WSGI environment
     # Coleta as informações da URL que foram retornadas pelo Provedor OpenID (OP - WSO2 IS)
-    response = request.query_string
-  
-
+    response = environ["QUERY_STRING"]
+    print(response)
+'''
     response = response.decode('ascii')
-   
-    
     aresp = client.parse_response(AuthorizationResponse, info=response, sformat="urlencoded")
-    
-   
     code = aresp["code"]
-    assert aresp["state"] == state   #Verifica se o state enviado na solicitação de autenticação é o mesmo retornado pelo Provedor Open ID (OP - WSO2 IS)
+    assert aresp["state"] == session["state"]   #Verifica se o state enviado na solicitação de autenticação é o mesmo retornado pelo Provedor Open ID (OP - WSO2 IS)
 
   
     with no_ssl_verification():
@@ -193,8 +192,7 @@ def callback():
     
     else:
         return "ERRO DE AUTENTICAÇÃO"
-
-
+'''
 
 app.run(debug=True)
 

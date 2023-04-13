@@ -1,5 +1,6 @@
 import styles from './SolicitaçãoCadastramento.module.css'
 import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
 
 import logo_mpmg from '../../img/Logo_mpmg.png'
 import logo_ufmg from '../../img/logo_dcc.png'
@@ -12,13 +13,16 @@ function SolicitaçãoCadastramento(){
         
         fetch('http://localhost:5000/login', {
             method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
         })
-            .then(url_login => {
-            console.log(url_login.data);
-            window.location.href = url_login.data //Abre no browser a URL de login recebida.
+            .then(resp => resp.text())
+            .then((data) => {
+            console.log(data);
+            window.location.href = data;
         })
-            .catch((err)  => console.log(err))
-        
+            .catch((error)=> console.log(error))
     }
 
     const history = useNavigate()
