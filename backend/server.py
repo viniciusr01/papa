@@ -1,9 +1,9 @@
-from flask import Flask, request, redirect, session, url_for
+from flask import Flask, redirect, session, url_for
+from flask import request
+from flask import redirect
 from flask_cors import CORS
 from flask.json import jsonify
 import json
-import warnings
-import contextlib
 import requests
 from urllib3.exceptions import InsecureRequestWarning
 
@@ -40,9 +40,7 @@ from services.gitLab import GitLab
 IPA = FreeIPA(FREEIPA_DOMAIN, FREEIPA_ROOT_USERNAME, FREEIPA_ROOT_PASSWORD )
 GL  = GitLab(GITLAB_DOMAIN, GITLAB_ROOT_USERNAME, GITLAB_ROOT_PASSWORD)
 
-old_merge_environment_settings = requests.Session.merge_environment_settings
-
-# This information is obtained upon registration of a new GitHub
+# Informação para autenticação com OAuth e WSO2
 client_id = OAUTH_CLIENT_KEY
 client_secret = OAUTH_CLIENT_SECRET
 redirect_uri=  "http://localhost:5000/callback"
@@ -55,6 +53,7 @@ token_url = 'https://150.164.10.89:9443/oauth2/token'
 
 app = Flask("PAPA - Backend")
 CORS(app)
+
 app.run(debug=True)
 
 @app.route("/")
