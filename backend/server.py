@@ -41,11 +41,24 @@ IPA = FreeIPA(FREEIPA_DOMAIN, FREEIPA_ROOT_USERNAME, FREEIPA_ROOT_PASSWORD )
 GL  = GitLab(GITLAB_DOMAIN, GITLAB_ROOT_USERNAME, GITLAB_ROOT_PASSWORD)
 
 # Informação para autenticação com OAuth e WSO2
+oauth.register(
+    name='wso2',
+    client_id='{{ your-wso2-client-id }}',
+    client_secret='{{ your-wso2-client-secret }}',
+    access_token_url='https://wso2.com/login/oauth/access_token',
+    access_token_params=None,
+    authorize_url='https://wso2.com/login/oauth/authorize',
+    authorize_params=None,
+    api_base_url='https://api.wso2.com/',
+    client_kwargs={'scope': 'user:email'},
+)
+
+
 oauth = OAuth()
 
 client_id = OAUTH_CLIENT_KEY
 client_secret = OAUTH_CLIENT_SECRET
-#redirect_uri=  'http://localhost:5000/callback'
+redirect_uri=  'http://localhost:5000/callback'
 
 scope = ['openid email']
 
@@ -69,17 +82,16 @@ def login():
 
     #redirect_uri = url_for('authorize', _external=True)
     print(uri)
-    return ("olá")
-#oauth.wso2.authorize_redirect(redirect_uri)
+    return oauth.authorize_redirect(redirect_uri)
 
 @app.route("/callback")
 def callback():
-    token = oauth.wso2.authorize_access_token()
-    resp = oauth.wso2.get('account/verify_credentials.json')
+    token = oauth.authorize_access_token()
+    resp = oauth.get('account/verify_credentials.json')
     resp.raise_for_status()
     profile = resp.json()
     # do something with the token and profile
-    return redirect('/')
+    return redirect('https://localhost:3000/home')
 
 
 @app.route("/user", methods= ['GET', 'POST', 'PUT', 'DELETE'])
