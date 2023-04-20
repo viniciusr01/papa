@@ -1,14 +1,14 @@
-from flask import Flask, redirect, session, url_for
+from flask import Flask
+from flask import redirect, session
 from flask import request
 from flask import redirect
 from flask_cors import CORS
-from flask.json import jsonify
 import json
-import requests
-from urllib3.exceptions import InsecureRequestWarning
+from flask import url_for, render_template
 
-from oauthlib.oauth2 import WebApplicationClient
-from requests_oauthlib import OAuth2Session
+from authlib.integrations.flask_client import OAuth
+from authlib.integrations.requests_client import OAuth2Session
+from authlib.integrations.httpx_client import AsyncOAuth2Client
 
 import sys
 sys.path.insert(0,"..")
@@ -41,45 +41,45 @@ IPA = FreeIPA(FREEIPA_DOMAIN, FREEIPA_ROOT_USERNAME, FREEIPA_ROOT_PASSWORD )
 GL  = GitLab(GITLAB_DOMAIN, GITLAB_ROOT_USERNAME, GITLAB_ROOT_PASSWORD)
 
 # Informação para autenticação com OAuth e WSO2
+oauth = OAuth()
+
 client_id = OAUTH_CLIENT_KEY
 client_secret = OAUTH_CLIENT_SECRET
-redirect_uri=  "http://localhost:5000/callback"
+#redirect_uri=  'http://localhost:5000/callback'
 
 scope = ['openid email']
-oauth = OAuth2Session(client_id, redirect_uri=redirect_uri, scope=scope)
-authorization_base_url= oauth.authorization_url('https://150.164.10.89:9443/oauth2/authorize')
-token_url = 'https://150.164.10.89:9443/oauth2/token'
 
+token_endpoint = 'https://150.164.10.89:9443/oauth2/token'
+
+client = OAuth2Session(client_id, client_secret, scope=scope)
+client = AsyncOAuth2Client(client_id, client_secret, scope=scope)
 
 app = Flask("PAPA - Backend")
 CORS(app)
 
-app.run(debug=True)
 
 @app.route("/")
 def home():
     return "<h1>Hello Word</h1>"
 
-@app.route("/login", methods=['GET'])
+@app.route("/login")
 def login():
-    wso2 = OAuth2Session(client_id)
-    authorization_url, state = wso2.authorization_url(authorization_base_url)
+    authorization_endpoint = 'https://150.164.10.89:9443/oauth2/authorize'
+    uri, state = client.create_authorization_url(authorization_endpoint)
 
-    # State is used to prevent CSRF, keep this for later.
-    session['oauth_state'] = state
-    print ('Please go to %s and authorize access.' % authorization_url)
-    return redirect(authorization_url)
+    #redirect_uri = url_for('authorize', _external=True)
+    print(uri)
+    return ("olá")
+#oauth.wso2.authorize_redirect(redirect_uri)
 
 @app.route("/callback")
 def callback():
-    wso2 = OAuth2Session(client_id, state=session['oauth_state'])
-    token = wso2.fetch_token(token_url, client_secret=client_secret,
-                               authorization_response=request.url)
-
-    session['oauth_token'] = token
-    print (token)
-    return redirect('http://localhost:3000/home')
-
+    token = oauth.wso2.authorize_access_token()
+    resp = oauth.wso2.get('account/verify_credentials.json')
+    resp.raise_for_status()
+    profile = resp.json()
+    # do something with the token and profile
+    return redirect('/')
 
 
 @app.route("/user", methods= ['GET', 'POST', 'PUT', 'DELETE'])
