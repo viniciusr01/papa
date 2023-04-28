@@ -13,9 +13,10 @@ function SolicitaçãoCadastramento(){
         fetch('http://localhost:5000/login', {
             method: 'GET',
         })
-            .then(url_login => {
-            console.log(url_login.data);
-            window.location.href = url_login.data //Abre no browser a URL de login recebida.
+        .then(resp => resp.text())
+        .then((data) => {
+        console.log(data);
+        window.location.href = data;
         })
             .catch((err)  => console.log(err))
         

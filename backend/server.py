@@ -3,12 +3,17 @@ from flask import redirect, session
 from flask import request
 from flask import redirect
 from flask_cors import CORS
-import json
 from flask import url_for, render_template
+import json
+import requests
+import warnings
+import contextlib
 
+from urllib3.exceptions import InsecureRequestWarning
 from authlib.integrations.flask_client import OAuth
 from authlib.integrations.requests_client import OAuth2Session
 from authlib.integrations.httpx_client import AsyncOAuth2Client
+from authlib.oauth2.rfc7523 import ClientSecretJWT
 
 import sys
 sys.path.insert(0,"..")
@@ -41,35 +46,68 @@ IPA = FreeIPA(FREEIPA_DOMAIN, FREEIPA_ROOT_USERNAME, FREEIPA_ROOT_PASSWORD )
 GL  = GitLab(GITLAB_DOMAIN, GITLAB_ROOT_USERNAME, GITLAB_ROOT_PASSWORD)
 
 # Informação para autenticação com OAuth e WSO2
-oauth.register(
-    name='wso2',
-    client_id='{{ your-wso2-client-id }}',
-    client_secret='{{ your-wso2-client-secret }}',
-    access_token_url='https://wso2.com/login/oauth/access_token',
-    access_token_params=None,
-    authorize_url='https://wso2.com/login/oauth/authorize',
-    authorize_params=None,
-    api_base_url='https://api.wso2.com/',
-    client_kwargs={'scope': 'user:email'},
-)
-
-
-oauth = OAuth()
-
-client_id = OAUTH_CLIENT_KEY
-client_secret = OAUTH_CLIENT_SECRET
-redirect_uri=  'http://localhost:5000/callback'
-
-scope = ['openid email']
-
-token_endpoint = 'https://150.164.10.89:9443/oauth2/token'
-
-client = OAuth2Session(client_id, client_secret, scope=scope)
-client = AsyncOAuth2Client(client_id, client_secret, scope=scope)
-
 app = Flask("PAPA - Backend")
 CORS(app)
 
+
+old_merge_environment_settings = requests.Session.merge_environment_settings
+
+@contextlib.contextmanager
+def no_ssl_verification():
+    opened_adapters = set()
+
+    def merge_environment_settings(self, url, proxies, stream, verify, cert):
+        # Verification happens only once per connection so we need to close
+        # all the opened adapters once we're done. Otherwise, the effects of
+        # verify=False persist beyond the end of this context manager.
+        opened_adapters.add(self.get_adapter(url))
+
+        settings = old_merge_environment_settings(self, url, proxies, stream, verify, cert)
+        settings['verify'] = False
+
+        return settings
+
+    requests.Session.merge_environment_settings = merge_environment_settings
+
+    try:
+        with warnings.catch_warnings():
+            warnings.simplefilter('ignore', InsecureRequestWarning)
+            yield
+    finally:
+        requests.Session.merge_environment_settings = old_merge_environment_settings
+
+        for adapter in opened_adapters:
+            try:
+                adapter.close()
+            except:
+                pass
+
+oauth = OAuth()
+oauth.init_app(app)
+
+client_id = 'gVXPQX0P0ffBUn2gs9aG9LGGRtsa'
+client_secret ='4aHj9_6vCenphTTWzZHvEhafp4ca'
+token_endpoint = 'https://150.164.10.89:9443/oauth2/token'
+redirect_uri=  'http://localhost:5000/callback'
+scope = ['openid email']
+
+client = OAuth2Session(client_id=client_id, client_secret=client_secret, scope=scope, redirect_uri=redirect_uri)
+
+oauth.register(
+    name='wso2',
+    client_id= 'gVXPQX0P0ffBUn2gs9aG9LGGRtsa',
+    client_secret= '4aHj9_6vCenphTTWzZHvEhafp4ca',
+    access_token_endpoint= 'https://150.164.10.89:9443/oauth2/token',
+    access_token_params=None,
+    authorize_endpoint= 'https://150.164.10.89:9443/oauth2/authorize',
+    authorize_params=None,
+    api_base_url='https://150.164.10.89:9443/',
+    client_kwargs={'scope': 'openid email'},
+    redirect_uri=  'http://localhost:5000/callback',
+    callback_url = 'https://localhost:3000/home',
+    userinfo_endpoint= "https://150.164.10.89:9443/oauth2/userinfo",
+
+)
 
 @app.route("/")
 def home():
@@ -77,21 +115,21 @@ def home():
 
 @app.route("/login")
 def login():
-    authorization_endpoint = 'https://150.164.10.89:9443/oauth2/authorize'
-    uri, state = client.create_authorization_url(authorization_endpoint)
+    authorization_uri = 'https://150.164.10.89:9443/oauth2/authorize'
+    uri, state = client.create_authorization_url(authorization_uri)
 
-    #redirect_uri = url_for('authorize', _external=True)
-    print(uri)
-    return oauth.authorize_redirect(redirect_uri)
+    return uri
 
 @app.route("/callback")
 def callback():
-    token = oauth.authorize_access_token()
-    resp = oauth.get('account/verify_credentials.json')
-    resp.raise_for_status()
-    profile = resp.json()
-    # do something with the token and profile
-    return redirect('https://localhost:3000/home')
+    with no_ssl_verification():
+
+        authorization_response = request.url
+        token_endpoint = 'https://150.164.10.89:9443/oauth2/token'
+        token = client.fetch_token(token_endpoint, authorization_response=authorization_response)
+        print('token is: ', token)
+
+        return redirect("http://localhost:3000/home")
 
 
 @app.route("/user", methods= ['GET', 'POST', 'PUT', 'DELETE'])
