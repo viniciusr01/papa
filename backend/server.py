@@ -1,9 +1,6 @@
-from flask import Flask
-from flask import redirect, session
-from flask import request
-from flask import redirect
+from flask import Flask, redirect, session, request
 from flask_cors import CORS
-from flask import url_for, render_template
+from flask_session import FileSystemSessionInterface
 import json
 import requests
 import warnings
@@ -45,10 +42,16 @@ from services.gitLab import GitLab
 IPA = FreeIPA(FREEIPA_DOMAIN, FREEIPA_ROOT_USERNAME, FREEIPA_ROOT_PASSWORD )
 GL  = GitLab(GITLAB_DOMAIN, GITLAB_ROOT_USERNAME, GITLAB_ROOT_PASSWORD)
 
-# Informação para autenticação com OAuth e WSO2
+# autenticação com OAuth e WSO2
 app = Flask("PAPA - Backend")
 CORS(app)
 
+
+app.config["SESSION_TYPE"] = 'filesystem'
+app.config["SAMESITE"] = None
+app.secret_key= b'_dgUDB/DT4567"%8tgV*HYe'
+app.config['SESSION_FILE_DIR'] = './session'
+app.session_interface = FileSystemSessionInterface(app.config['SESSION_FILE_DIR'], threshold=500, mode=384, key_prefix='flask_session_')
 
 old_merge_environment_settings = requests.Session.merge_environment_settings
 
@@ -127,9 +130,21 @@ def callback():
         authorization_response = request.url
         token_endpoint = 'https://150.164.10.89:9443/oauth2/token'
         token = client.fetch_token(token_endpoint, authorization_response=authorization_response)
-        print('token is: ', token)
+        session['token'] = token
+
+        print('token is: ', session['token'])
 
         return redirect("http://localhost:3000/home")
+    
+@app.route("/authorize")
+def authorize():
+    if 'token' in session:
+        token = session['token']
+        print('token authorized in session is:', token)
+        return token
+    else:
+        return "No token found in session"
+
 
 
 @app.route("/user", methods= ['GET', 'POST', 'PUT', 'DELETE'])
