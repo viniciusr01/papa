@@ -1,10 +1,12 @@
-from flask import Flask, redirect, session, request
+from flask import Flask, redirect, session, request, make_response, render_template
 from flask_cors import CORS
 from flask_session import FileSystemSessionInterface
-import json
-import requests
-import warnings
-import contextlib
+import json, requests, warnings, contextlib
+from flask_restful import Api
+from flask_jwt_extended import (JWTManager, jwt_required, get_jwt_identity,
+                                create_access_token, create_refresh_token, 
+                                set_access_cookies, set_refresh_cookies, 
+                                unset_jwt_cookies,unset_access_cookies)
 
 from urllib3.exceptions import InsecureRequestWarning
 from authlib.integrations.flask_client import OAuth
@@ -46,14 +48,13 @@ GL  = GitLab(GITLAB_DOMAIN, GITLAB_ROOT_USERNAME, GITLAB_ROOT_PASSWORD)
 app = Flask("PAPA - Backend")
 CORS(app)
 
-
-app.config["SESSION_TYPE"] = 'filesystem'
-app.config["SAMESITE"] = None
-app.secret_key= b'_dgUDB/DT4567"%8tgV*HYe'
-app.config['SESSION_FILE_DIR'] = './session'
-app.session_interface = FileSystemSessionInterface(app.config['SESSION_FILE_DIR'], threshold=500, mode=384, key_prefix='flask_session_')
-
 old_merge_environment_settings = requests.Session.merge_environment_settings
+app.config['BASE_URL'] = 'http://localhost:5000'  #Running on localhost
+app.config['JWT_SECRET_KEY'] = '_dgUDB/DT4567"%8tgV*HYe'
+app.config['JWT_TOKEN_LOCATION'] = ['cookies']
+app.config['JWT_COOKIE_CSRF_PROTECT'] = True
+app.config['JWT_CSRF_CHECK_FORM'] = True
+jwt = JWTManager(app) 
 
 @contextlib.contextmanager
 def no_ssl_verification():
@@ -84,6 +85,26 @@ def no_ssl_verification():
                 adapter.close()
             except:
                 pass
+
+@jwt.unauthorized_loader
+def unauthorized_callback(callback):
+    # No auth header
+    return redirect(app.config['BASE_URL'] + '/signup', 302)
+
+@jwt.invalid_token_loader
+def invalid_token_callback(callback):
+    # Invalid Fresh/Non-Fresh Access token in auth header
+    resp = make_response(redirect(app.config['BASE_URL'] + '/signup'))
+    unset_jwt_cookies(resp)
+    return resp, 302
+
+@jwt.expired_token_loader
+def expired_token_callback(callback):
+    # Expired auth header
+    resp = make_response(redirect(app.config['BASE_URL'] + '/token/refresh'))
+    unset_access_cookies(resp)
+    return resp, 302
+
 
 oauth = OAuth()
 oauth.init_app(app)
@@ -129,22 +150,17 @@ def callback():
 
         authorization_response = request.url
         token_endpoint = 'https://150.164.10.89:9443/oauth2/token'
-        token = client.fetch_token(token_endpoint, authorization_response=authorization_response)
-        session['token'] = token
+        access_token = client.fetch_token(token_endpoint, authorization_response=authorization_response)
+        resp = make_response(redirect('http://localhost:3000/home'))
+        set_access_cookies(resp, access_token)
 
-        print('token is: ', session['token'])
-
-        return redirect("http://localhost:3000/home")
+        return resp
     
-@app.route("/authorize")
-def authorize():
-    if 'token' in session:
-        token = session['token']
-        print('token authorized in session is:', token)
-        return token
-    else:
-        return "No token found in session"
-
+@app.route("/logout")
+def unset_jwt():
+    resp = make_response(redirect(app.config['BASE_URL'] + '/', 302))
+    unset_jwt_cookies(resp)
+    return resp
 
 
 @app.route("/user", methods= ['GET', 'POST', 'PUT', 'DELETE'])
@@ -256,6 +272,7 @@ def userPolicy():
 
     
 @app.route("/gitlab")
+
 @app.route("/gitlab/project", methods = ['GET', 'POST'])
 def projectGitLab():
     
@@ -281,6 +298,7 @@ def projectGitLab():
 
 
 @app.route("/ipa")
+
 @app.route("/ipa/getGroups", methods = ['GET'])
 def getGroupsIPA():
     return IPA.getGroupsIPA()
