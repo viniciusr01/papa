@@ -1,4 +1,4 @@
-from flask import Flask, redirect, session, request, make_response, render_template
+from flask import Flask, redirect, session, request, make_response, render_template, jsonify
 from flask_cors import CORS
 from flask_session import FileSystemSessionInterface
 import json, requests, warnings, contextlib
@@ -49,10 +49,10 @@ app = Flask("PAPA - Backend")
 CORS(app)
 
 old_merge_environment_settings = requests.Session.merge_environment_settings
-app.config['BASE_URL'] = 'http://localhost:5000'  #Running on localhost
+app.config['BASE_URL'] = 'http://localhost:3000'  #Running on localhost
 app.config['JWT_SECRET_KEY'] = '_dgUDB/DT4567"%8tgV*HYe'
 app.config['JWT_TOKEN_LOCATION'] = ['cookies']
-app.config['JWT_COOKIE_CSRF_PROTECT'] = True
+app.config['JWT_COOKIE_CSRF_PROTECT'] = False
 app.config['JWT_CSRF_CHECK_FORM'] = True
 jwt = JWTManager(app) 
 
@@ -89,12 +89,12 @@ def no_ssl_verification():
 @jwt.unauthorized_loader
 def unauthorized_callback(callback):
     # No auth header
-    return redirect(app.config['BASE_URL'] + '/signup', 302)
+    return redirect(app.config['BASE_URL'] + '/noauthheader', 302)
 
 @jwt.invalid_token_loader
 def invalid_token_callback(callback):
     # Invalid Fresh/Non-Fresh Access token in auth header
-    resp = make_response(redirect(app.config['BASE_URL'] + '/signup'))
+    resp = make_response(redirect(app.config['BASE_URL'] + '/invalidfreshaccesstoken'))
     unset_jwt_cookies(resp)
     return resp, 302
 
@@ -150,9 +150,21 @@ def callback():
 
         authorization_response = request.url
         token_endpoint = 'https://150.164.10.89:9443/oauth2/token'
-        access_token = client.fetch_token(token_endpoint, authorization_response=authorization_response)
-        resp = make_response(redirect('http://localhost:3000/home'))
+        url = 'http://localhost:3000/home'
+
+        token = client.fetch_token(token_endpoint, authorization_response=authorization_response)
+        access_token = token['id_token']
+        refresh_token = token['refresh_token']
+
+
+        resp = make_response(redirect(url, 302))
+        #resp.headers['Authorization'] = access_token
+        print("para aqui", url)
+
         set_access_cookies(resp, access_token)
+        set_refresh_cookies(resp, refresh_token)
+
+        print(token)
 
         return resp
     

@@ -12,6 +12,9 @@ function SolicitaçãoCadastramento(){
         
         fetch('http://localhost:5000/login', {
             method: 'GET',
+            headers: {
+                Authorization: 'access_token'
+            }
         })
         .then(resp => resp.text())
         .then((data) => {
