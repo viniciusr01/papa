@@ -174,6 +174,13 @@ def unset_jwt():
     unset_jwt_cookies(resp)
     return resp
 
+@app.route("/auth")
+def auth():
+    if "access_token_cookie" in request.cookies:
+        return True
+    else:
+        return False, "Not authorized. Token invalid or not found"
+
 
 @app.route("/user", methods= ['GET', 'POST', 'PUT', 'DELETE'])
 def user():
@@ -411,6 +418,7 @@ def policiesPIPA():
 
 
 @app.route("/policy/members", methods = ['GET', 'POST'])
+
 def policyMembers():
 
 

@@ -13,10 +13,11 @@ import GrupoPolitica  from './pages/GrupoPolitica/GrupoPolitica'
 import CriarGrupo from './pages/CriarGrupo/CriarGrupo';
 import SolicitaçãoCadastramento from './pages/SolicitaçãoCadastro/SolicitaçãoCadastramento';
 
-const PrivateRoute = ({component: Component, ...rest}) => {
-  const auth = isAuthenticated()
 
-  return auth ? <Component /> : <Navigate to="/" />
+const PrivateRoute = ({children, redirectTo}) => {
+  const auth = isAuthenticated()
+  console.log("isAuth:", isAuthenticated)
+  return auth ? children : <Navigate to="/" />
 }
 
 function App() {
@@ -27,28 +28,28 @@ function App() {
         <Navbar />
 
         <Routes>
-          <Route exact path="/" index element={<SolicitaçãoCadastramento/>} ></Route>
-          <Route exact path='/home' element={<PrivateRoute/>}>
-            <Route path="/home" index element={<Home/>} ></Route>
-          </Route>
-          <Route exact path='/cadastro' element={<PrivateRoute/>}>
-            <Route path="cadastro" element={<FormularioCadastro/>}></Route>
-          </Route>
-          <Route exact path='/usuarios' element={<PrivateRoute/>}>
-            <Route path="usuarios" element={<Usuarios/>}></Route>
-          </Route>
-          <Route exact path='/usuario/:username' element={<PrivateRoute/>}>
-            <Route path="usuario/:username" element={<Usuario/>}></Route>
-          </Route>
-          <Route exact path='/politicas' element={<PrivateRoute/>}>
-            <Route path="politicas" element={<GrupoPoliticas/>}></Route>
-          </Route>
-          <Route exact path='/politica/:policyID' element={<PrivateRoute/>}>
-            <Route path="politica/:policyID" element={<GrupoPolitica/>}></Route>
-          </Route>
-          <Route exact path='/criargrupo' element={<PrivateRoute/>}>
-            <Route path="criargrupo" element={<CriarGrupo/>}></Route>
-          </Route>
+          <Route exact path='/' index element={<SolicitaçãoCadastramento/>} />
+          <Route exact path='/home' element={<PrivateRoute>
+            <Home />
+          </PrivateRoute>} />
+          <Route exact path='/cadastro' element={<PrivateRoute>
+            <FormularioCadastro />
+          </PrivateRoute>} />
+          <Route exact path='/usuarios' element={<PrivateRoute>
+            <Usuarios />
+          </PrivateRoute>} />
+          <Route exact path='/usuario/:username' element={<PrivateRoute>
+            <Usuario />
+          </PrivateRoute>} />
+          <Route exact path='/politicas' element={<PrivateRoute>
+            <GrupoPoliticas />
+          </PrivateRoute>} />
+          <Route exact path='/politica/:policyID' element={<PrivateRoute>
+            <GrupoPolitica />
+          </PrivateRoute>} />
+          <Route exact path='/criargrupo' element={<PrivateRoute>
+            <CriarGrupo />
+          </PrivateRoute>} />
 
         </Routes>
 

@@ -24,7 +24,7 @@ function Home(){
                             ambiente computacional do GSI/MPMG
                         </h4>
 
-                        <img className={styles.logoMPMG} src={logo_mpmg}></img>
+                        <img className={styles .logoMPMG} src={logo_mpmg}></img>
                         <img className={styles.logoUFMG} src={logo_ufmg}></img>
                     
                     </Grid>
